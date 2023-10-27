@@ -1,0 +1,25 @@
+html {
+  --scramble-table-background: #FFF;
+  --scramble-table-main-color: black;
+  --scramble-table-link-color: #00E;
+  --scramble-table-link-visited-color: #551A8B;
+
+  background: var(--scramble-table-background);
+  color: var(--scramble-table-main-color);
+}
+
+html[color-scheme=dark] {
+  --scramble-table-background: #000D;
+  --scramble-table-main-color: #EEE;
+  --scramble-table-link-color: #669df5;
+  --scramble-table-link-visited-color: #af73d5;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([color-scheme=light]) {
+    --scramble-table-background: #000D;
+    --scramble-table-main-color: #EEE;
+    --scramble-table-link-color: #669df5;
+    --scramble-table-link-visited-color: #af73d5;
+  }
+}
