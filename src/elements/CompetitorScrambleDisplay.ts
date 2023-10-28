@@ -26,8 +26,6 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   setScramble(info: AttemptScrambleInfo): void {
     this.#info = info;
 
-    info.scramble.log();
-
     this.#setField(
       "competitor",
       `${info.competitorName} (${info.competitorCompetitionID})`,
