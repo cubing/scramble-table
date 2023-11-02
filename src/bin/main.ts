@@ -25,12 +25,21 @@ import type {
   if (args[0] === "help") {
     printUsageAndExit(0);
   }
-  if (args.length < 3) {
+  if (args.length < 4) {
     printUsageAndExit(1);
   }
 
-  const [jsonInputFile, passcodesInputFile, encryptedJSONOutputFile, ..._] =
-    args;
+  const [
+    command,
+    jsonInputFile,
+    passcodesInputFile,
+    encryptedJSONOutputFile,
+    ..._
+  ] = args;
+
+  if (command !== "encrypt") {
+    printUsageAndExit(1);
+  }
 
   const passcodesInputFileText = await readFile(passcodesInputFile, "utf-8");
 

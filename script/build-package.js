@@ -2,7 +2,7 @@ import { build } from "esbuild";
 import { esbuildOptions } from "./esbuildOptions.js";
 
 await build({
-  entryPoints: ["src/bin/encrypt.ts", "src/lib/index.ts"],
+  entryPoints: ["src/bin/main.ts", "src/lib/index.ts"],
   ...esbuildOptions,
   bundle: true,
   target: "es2020",
