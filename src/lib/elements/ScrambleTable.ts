@@ -41,7 +41,7 @@ export class ScrambleTable
 
   #initializeSettings() {
     this.querySelector("header button").addEventListener("click", () => {
-      this.classList.toggle("show-settings");
+      this.#toggleSettings();
     });
 
     // TODO: separate the settings into a separate element?
@@ -55,6 +55,8 @@ export class ScrambleTable
             JSON.parse(await (e.target as HTMLInputElement).files[0].text()),
           );
           inputFeedback.textContent = "Setting encrypted JSON… Success!";
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          this.#toggleSettings();
         } catch (e) {
           inputFeedback.textContent = `Setting encrypted JSON… Error: ${e}`;
           console.error(e);
@@ -65,6 +67,10 @@ export class ScrambleTable
       this.cachedScrambleJSON.clear();
       location.reload();
     });
+  }
+
+  #toggleSettings() {
+    this.classList.toggle("show-settings");
   }
 
   addDisplay() {
