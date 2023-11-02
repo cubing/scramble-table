@@ -1,5 +1,6 @@
 {
   "name": "@cubing/scramble-table",
+  "version": "0.0.4",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -36,6 +37,5 @@
     "@types/node": "^20.8.10",
     "barely-a-dev-server": "^0.6.0",
     "typescript": "^5.2.2"
-  },
-  "version": "0.0.4"
+  }
 }
