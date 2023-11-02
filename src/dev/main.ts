@@ -1,5 +1,9 @@
 import { Alg } from "cubing/alg";
 import { ScrambleTableApp } from "../lib/ScrambleTableApp";
+import {
+  decryptJSON,
+  encryptJSON,
+} from "../lib/encryption/passcode-encryption";
 
 declare global {
   interface globalThis {

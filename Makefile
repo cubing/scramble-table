@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build build-lib build-types dev clean upgrade-cubing lint format
+NPM_COMMANDS = build build-lib build-types dev clean upgrade-cubing lint format encrypt-fake-competition prepublishOnly
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
