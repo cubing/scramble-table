@@ -17,7 +17,7 @@
     "node": ">=19"
   },
   "files": [
-    "dist/lib"
+    "dist"
   ],
   "scripts": {
     "build": "make build",
