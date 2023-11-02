@@ -19,16 +19,8 @@
     "dist/lib"
   ],
   "scripts": {
-    "build": "npm run build-package && npm run build-types",
-    "build-package": "node script/build-package.js",
-    "build-types": "npx tsc",
-    "dev": "node script/dev.js",
-    "clean": "rm -rf ./dist",
-    "upgrade-cubing": "npm install --save cubing@latest",
-    "lint": "npx @biomejs/biome check ./src",
-    "format": "npx @biomejs/biome format --write ./src",
-    "encrypt-fake-competition": "bun run src/bin/encrypt.ts \"./src/dev/fake-competition/Fake Test Competition.json\" \"./src/dev/fake-competition/Fake Test Competition - Computer Display PDF Passcodes - SECRET.txt\" \"./src/dev/fake-competition/Fake Test Competition.encrypted-scrambles.json\"",
-    "prepublishOnly": "npm run clean && npm run build"
+    "build": "make build",
+    "prepublishOnly": "make prepublishOnly"
   },
   "dependencies": {
     "@fontsource/ubuntu": "^5.0.8",
