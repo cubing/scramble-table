@@ -6,7 +6,8 @@
     "verbatimModuleSyntax": true, // avoids surprises with `cubing/twisty`
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "dist/lib"
+    "outDir": "dist/lib",
+    "resolveJsonModule": true
   },
   "include": [
     "./src/lib/index.ts"

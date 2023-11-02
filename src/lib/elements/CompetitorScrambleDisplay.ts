@@ -9,6 +9,7 @@ import templateHTML from "./CompetitorScrambleDisplay.template.html";
 // @ts-ignore
 import css from "./main.css";
 
+import type { CachedScrambleJSON } from "../CachedScrambleJSON";
 import { addCSS, parse as parseHTML } from "./html";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
@@ -16,6 +17,10 @@ addCSS(mainCSS);
 addCSS(css);
 
 export class CompetitorScrambleDisplay extends HTMLElement {
+  constructor(private cachedScrambleJSON: CachedScrambleJSON) {
+    super();
+  }
+
   connectedCallback() {
     this.append(template.content.cloneNode(true));
     this.querySelector("twisty-alg-viewer").twistyPlayer =
@@ -23,8 +28,10 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   }
 
   #info: AttemptScrambleInfo | undefined;
-  setScramble(info: AttemptScrambleInfo): void {
+  async setScramble(info: AttemptScrambleInfo): Promise<void> {
     this.#info = info;
+
+    const scramble = await this.cachedScrambleJSON.getScramble(info);
 
     let competitorField = info.competitorName;
     if (typeof info.competitorCompetitionID !== "undefined") {
@@ -34,10 +41,10 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     const eventInfoData = eventInfo(info.eventID);
     this.#setField("event", eventInfoData.eventName);
     this.#setField("round", `Round ${info.roundNumber}`);
-    this.#setField("group", `Group ${info.groupID}`);
+    this.#setField("scramble-set", `Scramble Set ${info.scrambleSetNumber}`);
     this.#setField("attempt", `Attempt ${info.attemptID}`);
     this.querySelector("twisty-player").puzzle = eventInfoData.puzzleID;
-    this.querySelector("twisty-player").alg = info.scramble;
+    this.querySelector("twisty-player").alg = scramble;
   }
 
   #setField(field: string, text: string): void {

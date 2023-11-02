@@ -3,12 +3,14 @@
 import { assert } from "node:console";
 import { readFile, writeFile } from "node:fs/promises";
 import { argv, exit, stdout } from "node:process";
-import { encryptJSON } from "../lib/encryption/passcode-encryption";
 import {
-  CompetitionScrambleSetEncryptedJSON,
-  CompetitionScrambleSetJSON,
-  PartialCompetitionScramblesEncryptedJSON,
+  decryptJSON,
+  encryptJSON,
+} from "../lib/encryption/passcode-encryption";
+import type {
   PartialCompetitionScramblesJSON,
+  ScrambleSetEncryptedJSON,
+  ScrambleSetJSON,
 } from "../lib/json/format";
 
 (async () => {
@@ -33,7 +35,7 @@ import {
   const passcodesInputFileText = await readFile(passcodesInputFile, "utf-8");
 
   const passcodeTable = [];
-  for (const line of passcodesInputFileText.split("\n")) {
+  for (const line of passcodesInputFileText.split(/\r?\n/g)) {
     const [key, value, ..._] = line.split(": ");
     if (!value) {
       continue;
@@ -91,16 +93,14 @@ import {
     return passcode;
   }
 
-  const competitionScramblesJSON: PartialCompetitionScramblesJSON = JSON.parse(
-    await readFile(jsonInputFile, "utf-8"),
-  );
+  const competitionScramblesJSON: PartialCompetitionScramblesJSON<ScrambleSetJSON> =
+    JSON.parse(await readFile(jsonInputFile, "utf-8"));
 
   for (const event of competitionScramblesJSON.wcif.events) {
     for (const [roundNumberZeroIndexed, round] of event.rounds.entries()) {
       const oldScrambleSets = round.scrambleSets;
-      const newScrambleSets: CompetitionScrambleSetEncryptedJSON[] = [];
-      round.scrambleSets =
-        newScrambleSets as unknown as CompetitionScrambleSetJSON[];
+      const newScrambleSets: ScrambleSetEncryptedJSON[] = [];
+      round.scrambleSets = newScrambleSets as unknown as ScrambleSetJSON[];
       for (const [
         scrambleSetNumberZeroIndexed,
         scrambleSet,
@@ -127,7 +127,7 @@ import {
     }
   }
   const competitionScramblesEncryptedJSON =
-    competitionScramblesJSON as unknown as PartialCompetitionScramblesEncryptedJSON;
+    competitionScramblesJSON as unknown as PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>;
   competitionScramblesEncryptedJSON.encryptedScrambles = true;
   const outputFileContents = JSON.stringify(
     competitionScramblesEncryptedJSON,

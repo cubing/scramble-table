@@ -1,9 +1,8 @@
 import { Alg } from "cubing/alg";
 import { ScrambleTable } from "../lib/ScrambleTable";
-import {
-  decryptJSON,
-  encryptJSON,
-} from "../lib/encryption/passcode-encryption";
+import encryptedScramblesJSON from "./fake-competition/Fake Test Competition.encrypted-scrambles.json" assert {
+  type: "json",
+};
 
 declare global {
   interface globalThis {
@@ -14,25 +13,24 @@ declare global {
 const app = new ScrambleTable();
 globalThis.app = app;
 
+app.setEncryptedScrambleJSON(encryptedScramblesJSON);
+
 app.displays[0].setScramble({
   competitorName: "Minh Thai",
   competitorCompetitionID: 10,
   eventID: "333",
-  roundNumber: 2,
-  groupID: "1",
-  attemptID: "2",
-  scramble: new Alg(
-    "U L2 D' B2 U' R2 B2 F2 D' F2 L2 R2 F R2 D L2 R2 B' L' D' R F'",
-  ),
+  roundNumber: 1,
+  scrambleSetNumber: 1,
+  attemptID: "4",
+  passcode: "j2wuv8bd",
 });
 
 app.displays[1].setScramble({
-  competitorName: "Ben Streeter",
-  eventID: "fto",
+  competitorName: "Lars Petrus",
+  competitorCompetitionID: 11,
+  eventID: "333",
   roundNumber: 1,
-  groupID: "Y1",
-  attemptID: "1",
-  scramble: new Alg(
-    "B' L' U' F' L' B' L' D F2 U2 B2 L D2 R2 B2 R' D2 L D2 L' U",
-  ),
+  scrambleSetNumber: 2,
+  attemptID: "E1",
+  passcode: "umb3ea8e",
 });

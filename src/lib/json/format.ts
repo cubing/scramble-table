@@ -1,46 +1,29 @@
 // Unencrypted
 
-export interface CompetitionScrambleSetJSON {
+export interface ScrambleSetJSON {
   id: number;
   scrambles: string[];
   extraScrambles: string[];
 }
 
-export interface PartialCompetitionScramblesRoundJSON {
-  scrambleSetCount: number;
-  scrambleSets: CompetitionScrambleSetJSON[];
-}
-
-export interface PartialCompetitionScramblesJSON {
-  wcif: {
-    events: [
-      {
-        id: string;
-        rounds: PartialCompetitionScramblesRoundJSON[];
-      },
-    ];
-  };
-}
-
-// Encrypted
-
-export interface CompetitionScrambleSetEncryptedJSON {
+export interface ScrambleSetEncryptedJSON {
   id: number;
   ciphertext: string;
 }
 
-export interface PartialCompetitionScramblesRoundEncryptedJSON {
-  scrambleSets: CompetitionScrambleSetEncryptedJSON[];
+export interface PartialCompetitionScramblesRoundJSON<T> {
+  scrambleSetCount: number;
+  scrambleSets: T[];
 }
 
-export interface PartialCompetitionScramblesEncryptedJSON {
-  encryptedScrambles: true;
+export interface PartialCompetitionScramblesEventJSON<T> {
+  id: string;
+  rounds: PartialCompetitionScramblesRoundJSON<T>[];
+}
+
+export interface PartialCompetitionScramblesJSON<T> {
+  encryptedScrambles?: boolean;
   wcif: {
-    events: [
-      {
-        id: string;
-        rounds: PartialCompetitionScramblesRoundEncryptedJSON[];
-      },
-    ];
+    events: PartialCompetitionScramblesEventJSON<T>[];
   };
 }
