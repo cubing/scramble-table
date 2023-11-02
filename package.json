@@ -4,6 +4,13 @@
   "publishConfig": {
     "access": "public"
   },
+  "module": "./dist/@cubing/scramble-display/index.js",
+  "main": "./dist/@cubing/scramble-display/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/@cubing/scramble-display/index.js"
+    }
+  },
   "scripts": {
     "build": "node script/build.js",
     "dev": "node script/dev.js",
