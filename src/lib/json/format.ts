@@ -23,6 +23,7 @@ export interface PartialCompetitionScramblesEventJSON<T> {
 
 export interface PartialCompetitionScramblesJSON<T> {
   encryptedScrambles?: boolean;
+  competitionName: string;
   wcif: {
     events: PartialCompetitionScramblesEventJSON<T>[];
   };

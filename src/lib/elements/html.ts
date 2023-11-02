@@ -1,4 +1,4 @@
-export function parse<T extends Element>(s: string): T {
+export function parseHTML<T extends Element>(s: string): T {
   return new DOMParser().parseFromString(s, "text/html").head
     .firstElementChild as T;
 }

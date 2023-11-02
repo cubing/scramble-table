@@ -1,2 +1,7 @@
+import { addCSS } from "./elements/html";
+// @ts-ignore
+import mainCSS from "./elements/main.css";
+addCSS(mainCSS);
+
 export { CompetitorScrambleDisplay } from "./elements/CompetitorScrambleDisplay";
-export { ScrambleTable as ScrambleTableApp } from "./ScrambleTable";
+export { ScrambleTable } from "./elements/ScrambleTable";

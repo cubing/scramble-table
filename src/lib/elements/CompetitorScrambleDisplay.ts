@@ -1,19 +1,17 @@
 import { eventInfo } from "cubing/puzzles";
+import "cubing/twisty";
 
 import type { AttemptScrambleInfo } from "../AttemptScrambleInfo";
 
 // @ts-ignore
-import mainCSS from "./CompetitorScrambleDisplay.css";
+import css from "./CompetitorScrambleDisplay.css";
 // @ts-ignore
 import templateHTML from "./CompetitorScrambleDisplay.template.html";
-// @ts-ignore
-import css from "./main.css";
 
-import type { CachedScrambleJSON } from "../CachedScrambleJSON";
-import { addCSS, parse as parseHTML } from "./html";
+import type { CachedScrambleJSON } from "../json/CachedScrambleJSON";
+import { addCSS, parseHTML } from "./html";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
-addCSS(mainCSS);
 addCSS(css);
 
 export class CompetitorScrambleDisplay extends HTMLElement {

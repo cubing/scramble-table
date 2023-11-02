@@ -1,0 +1,47 @@
+scramble-table {
+  background: var(--scramble-table-background);
+  color: var(--scramble-table-main-color);
+
+  padding: 2em;
+  gap: 2em;
+  box-sizing: border-box;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto 1fr;
+  font-family: Ubuntu, Tahoma, sans-serif;
+}
+
+scramble-table>header {
+  grid-column: 1 / 3;
+  font-size: 2em;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+scramble-table>header button {
+  font-size: 1em;
+  background: none;
+  color: var(--scramble-table-main-color);
+  border: none
+}
+
+
+scramble-table>header button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+scramble-table:not(.show-settings) scramble-table-settings,
+scramble-table.show-settings competitor-scramble-display {
+  display: none;
+}
+
+scramble-table scramble-table-settings {
+  grid-column: 1 / 3;
+  border: 1px solid var(--scramble-table-border-color);
+  padding: 1em;
+  line-height: 1.5em;
+}

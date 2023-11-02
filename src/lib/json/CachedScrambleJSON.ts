@@ -3,22 +3,36 @@ import type {
   PartialCompetitionScramblesJSON,
   ScrambleSetEncryptedJSON,
   ScrambleSetJSON,
-} from "./json/format";
+} from "./format";
 
-import type { AttemptScrambleInfo } from "./AttemptScrambleInfo";
-import { decryptJSON } from "./encryption/passcode-encryption";
+import type { AttemptScrambleInfo } from "../AttemptScrambleInfo";
+import type { ScrambleTable } from "../elements/ScrambleTable";
+import { decryptJSON } from "../encryption/passcode-encryption";
+
+const LOCAL_STORAGE_KEY = "encrypted-scrambles-json";
+
+export interface CachedScrambleJSONDelegate {
+  setCompetitionName(name: string): void;
+}
 
 export class CachedScrambleJSON {
   #json: PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON> | undefined;
-  constructor() {
+  constructor(private delegate: CachedScrambleJSONDelegate) {
     try {
-      const jsonFromLocalStorage = localStorage["encrypted-scrambles-json"];
+      const jsonFromLocalStorage = localStorage[LOCAL_STORAGE_KEY];
       if (jsonFromLocalStorage) {
         this.#json = JSON.parse(jsonFromLocalStorage);
+        console.info("Loaded JSON from `localStorage` successfully! 🥳");
+        this.#onJSONHasBeenSet();
       }
-    } catch {
+    } catch (e) {
       console.warn("Invalid localStorage JSON!");
+      console.warn(e);
     }
+  }
+
+  #onJSONHasBeenSet() {
+    this.delegate.setCompetitionName(this.#json.competitionName);
   }
 
   setEncryptedScrambleJSON(
@@ -28,7 +42,14 @@ export class CachedScrambleJSON {
       throw new Error("Tried to set unencrypted scramble JSON?");
     }
     this.#json = json;
-    localStorage["encrypted-scrambles-json"] = JSON.stringify(json);
+    localStorage[LOCAL_STORAGE_KEY] = JSON.stringify(json);
+    this.#onJSONHasBeenSet();
+  }
+
+  // Does not propagate updates.
+  clear() {
+    delete localStorage[LOCAL_STORAGE_KEY];
+    this.#json = undefined;
   }
 
   #getEvent(

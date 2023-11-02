@@ -4,11 +4,11 @@ html {
   --scramble-table-link-color: #00E;
   --scramble-table-link-visited-color: #551A8B;
 
-  background: var(--scramble-table-background);
-  color: var(--scramble-table-main-color);
+  --scramble-table-border-color: color-mix(in oklab, var(--scramble-table-main-color) 50%, transparent);
 }
 
 html[color-scheme=dark] {
+  /* Keep in sync with the block below. */
   --scramble-table-background: #000D;
   --scramble-table-main-color: #EEE;
   --scramble-table-link-color: #669df5;
@@ -17,6 +17,7 @@ html[color-scheme=dark] {
 
 @media (prefers-color-scheme: dark) {
   html:not([color-scheme=light]) {
+    /* Keep in sync with the block above. */
     --scramble-table-background: #000D;
     --scramble-table-main-color: #EEE;
     --scramble-table-link-color: #669df5;

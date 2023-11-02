@@ -1,5 +1,5 @@
 import { Alg } from "cubing/alg";
-import { ScrambleTable } from "../lib/ScrambleTable";
+import { ScrambleTable } from "../lib";
 import encryptedScramblesJSON from "./fake-competition/Fake Test Competition.encrypted-scrambles.json" assert {
   type: "json",
 };
@@ -10,10 +10,8 @@ declare global {
   }
 }
 
-const app = new ScrambleTable();
+const app = document.body.appendChild(new ScrambleTable());
 globalThis.app = app;
-
-app.setEncryptedScrambleJSON(encryptedScramblesJSON);
 
 app.displays[0].setScramble({
   competitorName: "Minh Thai",
