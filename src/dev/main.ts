@@ -1,5 +1,5 @@
 import { Alg } from "cubing/alg";
-import { ScrambleTableApp } from "../lib/ScrambleTableApp";
+import { ScrambleTable } from "../lib/ScrambleTable";
 import {
   decryptJSON,
   encryptJSON,
@@ -7,11 +7,11 @@ import {
 
 declare global {
   interface globalThis {
-    app: ScrambleTableApp;
+    app: ScrambleTable;
   }
 }
 
-const app = new ScrambleTableApp();
+const app = new ScrambleTable();
 globalThis.app = app;
 
 app.displays[0].setScramble({

@@ -1,2 +1,2 @@
 export { CompetitorScrambleDisplay } from "./elements/CompetitorScrambleDisplay";
-export { ScrambleTableApp } from "./ScrambleTableApp";
+export { ScrambleTable as ScrambleTableApp } from "./ScrambleTable";
