@@ -4,22 +4,23 @@
   "publishConfig": {
     "access": "public"
   },
-  "module": "./dist/lib/@cubing/scramble-display/index.js",
-  "main": "./dist/lib/@cubing/scramble-display/index.js",
+  "module": "./dist/lib/index.js",
+  "main": "./dist/lib/index.js",
+  "bin": "./dist/bin/encrypt.js",
   "exports": {
     ".": {
-      "import": "./dist/lib/@cubing/scramble-display/index.js"
+      "import": "./dist/lib/index.js"
     }
   },
   "engines": {
     "node": ">=19"
   },
   "files": [
-    "dist/lib/@cubing/scramble-display"
+    "dist/lib"
   ],
   "scripts": {
-    "build": "npm run build-lib && npm run build-types",
-    "build-lib": "node script/build-lib.js",
+    "build": "npm run build-package && npm run build-types",
+    "build-package": "node script/build-package.js",
     "build-types": "npx tsc",
     "dev": "node script/dev.js",
     "clean": "rm -rf ./dist",
