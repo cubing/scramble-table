@@ -8,6 +8,7 @@
   "module": "./dist/lib/index.js",
   "main": "./dist/lib/index.js",
   "bin": "./dist/bin/encrypt.js",
+  "license": "MPL-2.0",
   "exports": {
     ".": {
       "import": "./dist/lib/index.js"
