@@ -4,31 +4,33 @@
   "publishConfig": {
     "access": "public"
   },
-  "module": "./dist/@cubing/scramble-display/index.js",
-  "main": "./dist/@cubing/scramble-display/index.js",
+  "module": "./dist/lib/@cubing/scramble-display/index.js",
+  "main": "./dist/lib/@cubing/scramble-display/index.js",
   "exports": {
     ".": {
-      "import": "./dist/@cubing/scramble-display/index.js"
+      "import": "./dist/lib/@cubing/scramble-display/index.js"
     }
   },
-  "files": [
-    "dist/@cubing/scramble-display"
-  ],
+  "files": ["dist/lib/@cubing/scramble-display"],
   "scripts": {
-    "build": "node script/build.js",
+    "build": "npm run build-lib && npm run build-types",
+    "build-lib": "node script/build-lib.js",
+    "build-types": "npx tsc",
     "dev": "node script/dev.js",
     "clean": "rm -rf ./dist",
     "upgrade-cubing": "npm install --save cubing@latest",
     "lint": "npx @biomejs/biome check ./src",
-    "format": "npx @biomejs/biome format --write ./src"
+    "format": "npx @biomejs/biome format --write ./src",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
     "@fontsource/ubuntu": "^5.0.8",
-    "cubing": "^0.43.7"
+    "cubing": "^0.43.8"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.3.1",
-    "barely-a-dev-server": "^0.6.0"
+    "barely-a-dev-server": "^0.6.0",
+    "typescript": "^5.2.2"
   },
   "version": "0.0.3"
 }

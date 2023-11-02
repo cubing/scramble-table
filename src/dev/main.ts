@@ -1,5 +1,5 @@
 import { Alg } from "cubing/alg";
-import { ScrambleTableApp } from "./ScrambleTableApp";
+import { ScrambleTableApp } from "../lib/ScrambleTableApp";
 
 declare global {
   interface globalThis {
@@ -24,7 +24,6 @@ app.displays[0].setScramble({
 
 app.displays[1].setScramble({
   competitorName: "Ben Streeter",
-  competitorCompetitionID: 10,
   eventID: "fto",
   roundNumber: 1,
   groupID: "Y1",

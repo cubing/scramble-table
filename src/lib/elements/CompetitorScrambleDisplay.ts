@@ -26,10 +26,11 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   setScramble(info: AttemptScrambleInfo): void {
     this.#info = info;
 
-    this.#setField(
-      "competitor",
-      `${info.competitorName} (${info.competitorCompetitionID})`,
-    );
+    let competitorField = info.competitorName;
+    if (typeof info.competitorCompetitionID !== "undefined") {
+      competitorField = `${competitorField} (ID ${info.competitorCompetitionID})`;
+    }
+    this.#setField("competitor", competitorField);
     const eventInfoData = eventInfo(info.eventID);
     this.#setField("event", eventInfoData.eventName);
     this.#setField("round", `Round ${info.roundNumber}`);

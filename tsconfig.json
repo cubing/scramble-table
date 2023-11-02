@@ -4,5 +4,11 @@
     "module": "es2022",
     "moduleResolution": "bundler",
     "verbatimModuleSyntax": true, // avoids surprises with `cubing/twisty`
-  }
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist/lib/@cubing/scramble-display"
+  },
+  "include": [
+    "./src/lib/index.ts"
+  ]
 }

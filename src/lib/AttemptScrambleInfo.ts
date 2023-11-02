@@ -2,7 +2,7 @@ import type { Alg } from "cubing/alg";
 
 export interface AttemptScrambleInfo {
   competitorName: string;
-  competitorCompetitionID: number;
+  competitorCompetitionID?: number;
   eventID: string;
   roundNumber: number;
   groupID: string; // e.g. "Y2" (yellow 2)
