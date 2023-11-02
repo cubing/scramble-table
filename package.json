@@ -1,6 +1,9 @@
 {
   "name": "@cubing/scramble-table",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "node script/build.js",
     "dev": "node script/dev.js",
