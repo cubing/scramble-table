@@ -16,3 +16,7 @@ update-Makefile:
 	@echo "Updating Makefile…"
 	@if [ "$(shell uname -s)" = "Darwin" ] ; then sed -i "" ${UPDATE_MAKEFILE_SED_ARGS} ; fi
 	@if [ "$(shell uname -s)" != "Darwin" ] ; then sed -i"" ${UPDATE_MAKEFILE_SED_ARGS} ; fi
+
+.PHONY: publish
+publish:
+	npm publish
