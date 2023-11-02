@@ -11,6 +11,7 @@
       "import": "./dist/@cubing/scramble-display/index.js"
     }
   },
+  "files": ["dist/@cubing/scramble-display"],
   "scripts": {
     "build": "node script/build.js",
     "dev": "node script/dev.js",
