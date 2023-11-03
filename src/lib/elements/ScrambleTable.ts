@@ -65,12 +65,17 @@ export class ScrambleTable
 
   #initializeSettings() {
     this.querySelector("header button").addEventListener("click", () => {
-      this.#toggleSettings();
+      this.#showSettings();
     });
 
+    this.querySelector(
+      ".scramble-table-settings button.close",
+    ).addEventListener("click", () => {
+      this.#hideSettings();
+    });
     // TODO: separate the settings into a separate element?
     const inputFeedback = this.querySelector(".input-feedback");
-    this.querySelector("scramble-table-settings .file-input").addEventListener(
+    this.querySelector(".scramble-table-settings .file-input").addEventListener(
       "change",
       async (e) => {
         try {
@@ -80,7 +85,7 @@ export class ScrambleTable
           );
           inputFeedback.textContent = "Setting encrypted JSON… Success!";
           await new Promise((resolve) => setTimeout(resolve, 1000));
-          this.#toggleSettings();
+          this.#hideSettings();
         } catch (e) {
           inputFeedback.textContent = `Setting encrypted JSON… Error: ${e}`;
           console.error(e);
@@ -109,8 +114,14 @@ export class ScrambleTable
     });
   }
 
-  #toggleSettings() {
-    this.classList.toggle("show-settings");
+  #showSettings() {
+    this.querySelector<HTMLDialogElement>(
+      ".scramble-table-settings",
+    ).showModal();
+  }
+
+  #hideSettings() {
+    this.querySelector<HTMLDialogElement>(".scramble-table-settings").close();
   }
 
   addDisplay() {

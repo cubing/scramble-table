@@ -42,14 +42,26 @@ scramble-table scramble-table-contents {
   gap: 2em;
 }
 
-scramble-table:not(.show-settings) scramble-table-settings,
-scramble-table.show-settings competitor-scramble-display {
-  display: none;
+scramble-table .scramble-table-settings {
+  border: 1px solid var(--scramble-table-border-color);
+  padding: 2em;
+  line-height: 1.5em;
+  color: var(--scramble-table-main-color);
+  backdrop-filter: blur(0.25em);
+  background: color-mix(in oklab, var(--scramble-table-background) 90%, transparent);
 }
 
-scramble-table scramble-table-settings {
-  grid-column: 1 / 3;
-  border: 1px solid var(--scramble-table-border-color);
-  padding: 1em;
-  line-height: 1.5em;
+scramble-table .scramble-table-settings h1 {
+  margin-top: 0;
+}
+
+scramble-table .scramble-table-settings .close {
+  float: right;
+  position: relative
+}
+
+scramble-table dialog::backdrop {
+  background-color: #444;
+  opacity: 0.75;
+  z-index: 1;
 }
