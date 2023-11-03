@@ -4,10 +4,15 @@
     <div class="competition-name">Scramble Table</div>
     <div><button class="settings-button">Settings ⚙️</button></div>
   </header>
-  <scramble-table-settings>
-    <span>Add encrypted scrambles to this device via JSON:</span> <input type="file" class="file-input"
-      name="Add encrypted JSON"><br>
-    <span class="input-feedback"></span><br>
-    <span><button class="clear-json">Clear JSON</button></span>
-  </scramble-table-settings>
+  <scramble-table-contents>
+    <scramble-table-settings>
+      <span>Add encrypted scrambles to this device via JSON:</span> <input type="file" class="file-input"
+        name="Add encrypted JSON"><br>
+      <span class="input-feedback"></span><br>
+      <span><button class="clear-json">Clear JSON</button></span>
+
+      <hr>
+      Number of scramble displays: <input class="num-scramble-displays" type="number" min="1" max="4" value="2">
+    </scramble-table-settings>
+  </scramble-table-contents>
 </template>

@@ -25,7 +25,12 @@ import templateHTML from "./ScrambleTable.template.html";
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
 
-const DEFAULT_NUM_DISPLAYS = 2;
+const NUM_SCRAMBLE_DISPLAYS_LOCALSTORAGE_KEY =
+  "scrambleTableNumStorageDisplays";
+
+const DEFAULT_NUM_DISPLAYS = parseInt(
+  localStorage[NUM_SCRAMBLE_DISPLAYS_LOCALSTORAGE_KEY] ?? 2,
+);
 const DEFAULT_SET_SCRAMBLER_CALLBACK = async (
   displayIndex: number,
 ): Promise<string> => {
@@ -86,6 +91,22 @@ export class ScrambleTable
       this.sharedState.scrambleJSONCache.clear();
       location.reload();
     });
+
+    const numScrambleDisplaysInput = this.querySelector<HTMLInputElement>(
+      ".num-scramble-displays",
+    );
+    numScrambleDisplaysInput.value = `${this.displays.length}`;
+    numScrambleDisplaysInput.addEventListener("change", () => {
+      const newNumScrambleDisplays = parseInt(numScrambleDisplaysInput.value);
+      while (this.displays.length < newNumScrambleDisplays) {
+        this.addDisplay();
+      }
+      while (this.displays.length > newNumScrambleDisplays) {
+        this.removeLastDisplay();
+      }
+      localStorage[NUM_SCRAMBLE_DISPLAYS_LOCALSTORAGE_KEY] =
+        newNumScrambleDisplays;
+    });
   }
 
   #toggleSettings() {
@@ -95,8 +116,15 @@ export class ScrambleTable
   addDisplay() {
     const idx = this.displays.length;
     this.displays.push(
-      this.appendChild(new CompetitorScrambleDisplay(this.sharedState, idx)),
+      this.querySelector("scramble-table-contents").appendChild(
+        new CompetitorScrambleDisplay(this.sharedState, idx),
+      ),
     );
+  }
+
+  removeLastDisplay() {
+    const display = this.displays.splice(-1)[0];
+    display.remove();
   }
 
   setCompetitionName(name: string) {

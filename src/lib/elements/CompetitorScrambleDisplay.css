@@ -30,6 +30,7 @@ competitor-scramble-display .info .split {
   display: grid;
   grid-auto-flow: column;
   justify-content: space-between;
+  gap: 1em;
 }
 
 competitor-scramble-display .info .scrambler,
