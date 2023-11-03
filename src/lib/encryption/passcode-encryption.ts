@@ -17,9 +17,6 @@ export async function encryptJSON<T>(
   return arrayBufferToHex(encrypter.encrypt(JSON.stringify(json)));
 }
 
-/**
- * Decrypts by reversing the output of `encryptJSON()`.
- */
 export async function decryptJSON<T>(
   hexCiphertext: string,
   passcode: string,
