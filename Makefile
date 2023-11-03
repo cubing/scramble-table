@@ -24,11 +24,11 @@ upgrade-cubing:
 
 .PHONY: lint
 lint:
-	npx @biomejs/biome check ./src
+	npx @biomejs/biome check ./script ./src/bin ./src/lib
 
 .PHONY: format
 format:
-	npx @biomejs/biome format --write ./src
+	npx @biomejs/biome format --write ./script ./src/bin ./src/lib
 
 .PHONY: encrypt-fake-competition
 encrypt-fake-competition:
