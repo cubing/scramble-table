@@ -1,10 +1,17 @@
 <template>
   <div class="info">
-    <span class="competitor"></span>
-    <span class="event"></span>
-    <span class="round"></span>
-    <span class="scramble-set"></span>
-    <span class="attempt"></span>
+    <div class="split scrambler"><span class="scrambler-name">Scrambler 1</span><button class="set-scrambler"
+        data-original-text="Set scrambler">Set
+        scrambler</button></div>
+    <div class="competitor"></div>
+    <div class="split">
+      <div class="event"></div>
+      <div class="scramble-set"></div>
+    </div>
+    <div class="split">
+      <div class="round"></div>
+      <div class="attempt"></div>
+    </div>
   </div>
   <twisty-alg-viewer></twisty-alg-viewer>
   <twisty-player background="none" control-panel="none" visualization="2D"></twisty-player>

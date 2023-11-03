@@ -6,7 +6,6 @@ import type {
 } from "./format";
 
 import type { AttemptScrambleInfo } from "../AttemptScrambleInfo";
-import type { ScrambleTable } from "../elements/ScrambleTable";
 import { decryptJSON } from "../encryption/passcode-encryption";
 
 const LOCAL_STORAGE_KEY = "encrypted-scrambles-json";
@@ -15,6 +14,7 @@ export interface CachedScrambleJSONDelegate {
   setCompetitionName(name: string): void;
 }
 
+// TODO: Rename to `ScrambleJSONCache`.
 export class CachedScrambleJSON {
   #json: PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON> | undefined;
   constructor(private delegate: CachedScrambleJSONDelegate) {

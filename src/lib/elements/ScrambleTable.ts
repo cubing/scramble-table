@@ -12,6 +12,11 @@ import {
 } from "../json/CachedScrambleJSON";
 import { addCSS, parseHTML } from "./html";
 
+import type {
+  ScrambleTableInitializationOptions,
+  SharedState,
+} from "./SharedState";
+
 // @ts-ignore
 import css from "./ScrambleTable.css";
 // @ts-ignore
@@ -21,19 +26,33 @@ const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
 
 const DEFAULT_NUM_DISPLAYS = 2;
+const DEFAULT_SET_SCRAMBLER_CALLBACK = async (
+  displayIndex: number,
+): Promise<string> => {
+  return prompt(`Please enter the name of scrambler ${displayIndex + 1}:`);
+};
+
 export class ScrambleTable
   extends HTMLElement
   implements CachedScrambleJSONDelegate
 {
   public displays: CompetitorScrambleDisplay[] = [];
-  private cachedScrambleJSON;
-  constructor(numDisplays: number = DEFAULT_NUM_DISPLAYS) {
+  private sharedState: SharedState;
+  constructor(options?: ScrambleTableInitializationOptions) {
     super();
     // TODO: Defer some of this to `connectedCallback`?
     this.append(template.content.cloneNode(true));
-    this.cachedScrambleJSON = new CachedScrambleJSON(this); // TODO: place this in a less fragile location.
+    const cachedScrambleJSON = new CachedScrambleJSON(this); // TODO: place this in a less fragile location.
+    const setScramblerCallback =
+      options?.setScramblerCallback ?? DEFAULT_SET_SCRAMBLER_CALLBACK;
 
-    for (let i = 0; i < numDisplays; i++) {
+    this.sharedState = {
+      cachedScrambleJSON,
+      setScramblerCallback,
+    };
+
+    const initialNumDisplays = options?.numDisplays ?? DEFAULT_NUM_DISPLAYS;
+    for (let i = 0; i < initialNumDisplays; i++) {
       this.addDisplay();
     }
     this.#initializeSettings();
@@ -51,7 +70,7 @@ export class ScrambleTable
       async (e) => {
         try {
           inputFeedback.textContent = "Setting encrypted JSON…";
-          this.cachedScrambleJSON.setEncryptedScrambleJSON(
+          this.sharedState.cachedScrambleJSON.setEncryptedScrambleJSON(
             JSON.parse(await (e.target as HTMLInputElement).files[0].text()),
           );
           inputFeedback.textContent = "Setting encrypted JSON… Success!";
@@ -64,7 +83,7 @@ export class ScrambleTable
       },
     );
     this.querySelector(".clear-json").addEventListener("click", () => {
-      this.cachedScrambleJSON.clear();
+      this.sharedState.cachedScrambleJSON.clear();
       location.reload();
     });
   }
@@ -74,8 +93,9 @@ export class ScrambleTable
   }
 
   addDisplay() {
+    const idx = this.displays.length;
     this.displays.push(
-      this.appendChild(new CompetitorScrambleDisplay(this.cachedScrambleJSON)),
+      this.appendChild(new CompetitorScrambleDisplay(this.sharedState, idx)),
     );
   }
 
@@ -86,7 +106,7 @@ export class ScrambleTable
   setEncryptedScrambleJSONForDebugging(
     json: PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>,
   ) {
-    this.cachedScrambleJSON.setEncryptedScrambleJSON(json);
+    this.sharedState.cachedScrambleJSON.setEncryptedScrambleJSON(json);
   }
 }
 

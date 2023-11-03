@@ -14,16 +14,32 @@ competitor-scramble-display .info {
   border-color: var(--border-color);
 }
 
-competitor-scramble-display .info span:nth-child(odd) {
+competitor-scramble-display .info>div:nth-child(odd) {
   background: color-mix(in oklab, var(--scramble-table-main-color) 5%, transparent);
 }
 
-competitor-scramble-display .info span {
+competitor-scramble-display .info>div {
   padding: 0.5em;
 }
 
-competitor-scramble-display .info span:empty {
+competitor-scramble-display .info>div:empty {
   display: none;
+}
+
+competitor-scramble-display .info .split {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+
+competitor-scramble-display .info .scrambler,
+competitor-scramble-display twisty-alg-viewer {
+  border-bottom: 1px solid;
+}
+
+competitor-scramble-display .info .competitor {
+  font-size: 1.5em;
+  text-align: center;
 }
 
 competitor-scramble-display twisty-alg-viewer {
@@ -31,8 +47,8 @@ competitor-scramble-display twisty-alg-viewer {
   padding: 0.75em;
   box-sizing: border-box;
   display: block;
-  border-bottom: 1px solid;
 }
+
 
 twisty-player {
   width: 100%;

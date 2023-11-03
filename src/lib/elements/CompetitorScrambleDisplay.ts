@@ -9,18 +9,22 @@ import css from "./CompetitorScrambleDisplay.css";
 import templateHTML from "./CompetitorScrambleDisplay.template.html";
 
 import type { CachedScrambleJSON } from "../json/CachedScrambleJSON";
+import type { SharedState } from "./SharedState";
 import { addCSS, parseHTML } from "./html";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
 
 export class CompetitorScrambleDisplay extends HTMLElement {
-  constructor(private cachedScrambleJSON: CachedScrambleJSON) {
+  constructor(private sharedState: SharedState, private displayIndex: number) {
     super();
   }
 
   connectedCallback() {
     this.append(template.content.cloneNode(true));
+    this.querySelector(".set-scrambler").addEventListener("click", () =>
+      this.#onSetScrambler(),
+    );
     this.querySelector("twisty-alg-viewer").twistyPlayer =
       this.querySelector("twisty-player");
   }
@@ -29,7 +33,9 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   async setScramble(info: AttemptScrambleInfo): Promise<void> {
     this.#info = info;
 
-    const scramble = await this.cachedScrambleJSON.getScramble(info);
+    const scramble = await this.sharedState.cachedScrambleJSON.getScramble(
+      info,
+    );
 
     let competitorField = info.competitorName;
     if (typeof info.competitorCompetitionID !== "undefined") {
@@ -47,6 +53,15 @@ export class CompetitorScrambleDisplay extends HTMLElement {
 
   #setField(field: string, text: string): void {
     this.getElementsByClassName(field)[0].textContent = text;
+  }
+
+  async #onSetScrambler() {
+    const setScramblerButton = this.querySelector(".set-scrambler");
+    setScramblerButton.textContent = "Please identify this scrambler…";
+    const name = await this.sharedState.setScramblerCallback(this.displayIndex);
+    this.#setField("scrambler-name", `Scrambler: ${name}`);
+    setScramblerButton.textContent =
+      setScramblerButton.getAttribute("data-original-text");
   }
 }
 
