@@ -30,6 +30,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
 
   #info: AttemptScrambleInfo | undefined;
   async setScramble(info: AttemptScrambleInfo): Promise<void> {
+    this.classList.remove("scramble-signed");
     this.#info = info;
 
     const scramble = await this.sharedState.scrambleJSONCache.getScramble(info);
@@ -59,6 +60,10 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.#setField("scrambler-name", `Scrambler: ${name}`);
     setScramblerButton.textContent =
       setScramblerButton.getAttribute("data-original-text");
+  }
+
+  markAsSigned() {
+    this.classList.add("scramble-signed");
   }
 }
 
