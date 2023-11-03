@@ -65,7 +65,7 @@ export class ScrambleTable
 
     // TODO: separate the settings into a separate element?
     const inputFeedback = this.querySelector(".input-feedback");
-    this.querySelector("scramble-table-settings").addEventListener(
+    this.querySelector("scramble-table-settings .file-input").addEventListener(
       "change",
       async (e) => {
         try {
