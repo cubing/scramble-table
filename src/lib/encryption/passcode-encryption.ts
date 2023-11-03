@@ -3,7 +3,7 @@
 import { default as arrayBufferToHex } from "array-buffer-to-hex";
 import { default as hexToArrayBuffer } from "hex-to-array-buffer";
 
-import age from "../../vendor/age-encryption/dist";
+import age from "age-encryption";
 
 const SCRYPT_WORK_FACTOR = 12;
 
