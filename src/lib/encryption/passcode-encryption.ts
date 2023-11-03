@@ -1,4 +1,4 @@
-// TODO: audit https://github.com/xtrp/encrypt-with-password and/or look for other options, instead of implementing from scratch.
+// TODO: Use `age` passphrase encryption: https://github.com/FiloSottile/age.ts
 
 import { default as arrayBufferToHex } from "array-buffer-to-hex";
 import { default as hexToArrayBuffer } from "hex-to-array-buffer";
