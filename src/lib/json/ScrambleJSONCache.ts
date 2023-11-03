@@ -10,14 +10,13 @@ import { decryptJSON } from "../encryption/passcode-encryption";
 
 const LOCAL_STORAGE_KEY = "encrypted-scrambles-json";
 
-export interface CachedScrambleJSONDelegate {
+export interface ScrambleJSONCacheDelegate {
   setCompetitionName(name: string): void;
 }
 
-// TODO: Rename to `ScrambleJSONCache`.
-export class CachedScrambleJSON {
+export class ScrambleJSONCache {
   #json: PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON> | undefined;
-  constructor(private delegate: CachedScrambleJSONDelegate) {
+  constructor(private delegate: ScrambleJSONCacheDelegate) {
     try {
       const jsonFromLocalStorage = localStorage[LOCAL_STORAGE_KEY];
       if (jsonFromLocalStorage) {

@@ -7,9 +7,9 @@ import type {
 } from "../json/format";
 
 import {
-  CachedScrambleJSON,
-  type CachedScrambleJSONDelegate,
-} from "../json/CachedScrambleJSON";
+  ScrambleJSONCache,
+  type ScrambleJSONCacheDelegate,
+} from "../json/ScrambleJSONCache";
 import { addCSS, parseHTML } from "./html";
 
 import type {
@@ -34,7 +34,7 @@ const DEFAULT_SET_SCRAMBLER_CALLBACK = async (
 
 export class ScrambleTable
   extends HTMLElement
-  implements CachedScrambleJSONDelegate
+  implements ScrambleJSONCacheDelegate
 {
   public displays: CompetitorScrambleDisplay[] = [];
   private sharedState: SharedState;
@@ -42,12 +42,12 @@ export class ScrambleTable
     super();
     // TODO: Defer some of this to `connectedCallback`?
     this.append(template.content.cloneNode(true));
-    const cachedScrambleJSON = new CachedScrambleJSON(this); // TODO: place this in a less fragile location.
+    const scrambleJSONCache = new ScrambleJSONCache(this); // TODO: place this in a less fragile location.
     const setScramblerCallback =
       options?.setScramblerCallback ?? DEFAULT_SET_SCRAMBLER_CALLBACK;
 
     this.sharedState = {
-      cachedScrambleJSON,
+      scrambleJSONCache,
       setScramblerCallback,
     };
 
@@ -70,7 +70,7 @@ export class ScrambleTable
       async (e) => {
         try {
           inputFeedback.textContent = "Setting encrypted JSON…";
-          this.sharedState.cachedScrambleJSON.setEncryptedScrambleJSON(
+          this.sharedState.scrambleJSONCache.setEncryptedScrambleJSON(
             JSON.parse(await (e.target as HTMLInputElement).files[0].text()),
           );
           inputFeedback.textContent = "Setting encrypted JSON… Success!";
@@ -83,7 +83,7 @@ export class ScrambleTable
       },
     );
     this.querySelector(".clear-json").addEventListener("click", () => {
-      this.sharedState.cachedScrambleJSON.clear();
+      this.sharedState.scrambleJSONCache.clear();
       location.reload();
     });
   }
@@ -106,7 +106,7 @@ export class ScrambleTable
   setEncryptedScrambleJSONForDebugging(
     json: PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>,
   ) {
-    this.sharedState.cachedScrambleJSON.setEncryptedScrambleJSON(json);
+    this.sharedState.scrambleJSONCache.setEncryptedScrambleJSON(json);
   }
 }
 

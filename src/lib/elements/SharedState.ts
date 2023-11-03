@@ -1,4 +1,4 @@
-import type { CachedScrambleJSON } from "../json/CachedScrambleJSON";
+import type { ScrambleJSONCache } from "../json/ScrambleJSONCache";
 
 export type SetScramblerCallback = (displayNumber: number) => Promise<string>;
 
@@ -8,6 +8,6 @@ export interface ScrambleTableInitializationOptions {
 }
 
 export interface SharedState {
-  cachedScrambleJSON: CachedScrambleJSON;
+  scrambleJSONCache: ScrambleJSONCache;
   setScramblerCallback: SetScramblerCallback;
 }

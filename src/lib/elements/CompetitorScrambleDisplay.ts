@@ -8,7 +8,7 @@ import css from "./CompetitorScrambleDisplay.css";
 // @ts-ignore
 import templateHTML from "./CompetitorScrambleDisplay.template.html";
 
-import type { CachedScrambleJSON } from "../json/CachedScrambleJSON";
+import type { ScrambleJSONCache } from "../json/ScrambleJSONCache";
 import type { SharedState } from "./SharedState";
 import { addCSS, parseHTML } from "./html";
 
@@ -33,9 +33,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   async setScramble(info: AttemptScrambleInfo): Promise<void> {
     this.#info = info;
 
-    const scramble = await this.sharedState.cachedScrambleJSON.getScramble(
-      info,
-    );
+    const scramble = await this.sharedState.scrambleJSONCache.getScramble(info);
 
     let competitorField = info.competitorName;
     if (typeof info.competitorCompetitionID !== "undefined") {
