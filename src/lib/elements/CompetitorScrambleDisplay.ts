@@ -8,7 +8,6 @@ import css from "./CompetitorScrambleDisplay.css";
 // @ts-ignore
 import templateHTML from "./CompetitorScrambleDisplay.template.html";
 
-import type { ScrambleJSONCache } from "../json/ScrambleJSONCache";
 import type { SharedState } from "./SharedState";
 import { addCSS, parseHTML } from "./html";
 
