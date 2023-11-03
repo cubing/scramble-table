@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@fontsource/ubuntu": "^5.0.8",
+    "age-encryption": "^0.0.4",
     "array-buffer-to-hex": "^1.0.0",
     "cubing": "^0.43.8",
     "hex-to-array-buffer": "^2.0.0",
