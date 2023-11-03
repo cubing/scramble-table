@@ -23,13 +23,16 @@ scramble-table>header {
 
 scramble-table>header button {
   font-size: 1em;
+}
+
+scramble-table>header button.settings-button {
+  font-size: 1em;
   background: none;
   color: var(--scramble-table-main-color);
   border: none
 }
 
-
-scramble-table>header button:hover {
+scramble-table>header button.settings-button:hover {
   text-decoration: underline;
   cursor: pointer;
 }

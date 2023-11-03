@@ -1,4 +1,3 @@
-import { Alg } from "cubing/alg";
 import { ScrambleTable } from "../lib";
 import encryptedScramblesJSON from "./fake-competition/Fake Test Competition.encrypted-scrambles.json" assert {
   type: "json",

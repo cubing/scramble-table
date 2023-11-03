@@ -108,6 +108,10 @@ export class ScrambleTable
   ) {
     this.sharedState.scrambleJSONCache.setEncryptedScrambleJSON(json);
   }
+
+  customHeaderElement(): HTMLElement {
+    return this.querySelector(".custom-header-element");
+  }
 }
 
 customElements.define("scramble-table", ScrambleTable);
