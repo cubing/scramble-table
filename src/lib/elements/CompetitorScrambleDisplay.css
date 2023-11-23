@@ -70,3 +70,11 @@ twisty-player {
 competitor-scramble-display.scramble-signed :is(twisty-alg-viewer, twisty-player) {
   opacity: 0.15;
 }
+
+competitor-scramble-display .multi {
+  display: grid;
+  grid-auto-flow: column;
+  padding: 1em;
+  gap: 1em;
+
+}
