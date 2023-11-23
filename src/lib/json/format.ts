@@ -1,15 +1,27 @@
 // Unencrypted
 
+type EncryptedJSON = string;
+
 export interface ScrambleSetJSON {
   id: number;
   scrambles: string[];
   extraScrambles: string[];
 }
 
-export interface ScrambleSetEncryptedJSON {
+export interface ScrambleSetEncryptedBulkJSON {
   id: number;
-  ciphertext: string;
+  ciphertext: EncryptedJSON;
 }
+
+export interface ScrambleSetEncryptedPerAttemptJSON {
+  id: number;
+  encryptedScrambles: EncryptedJSON[];
+  encryptedExtraScrambles: EncryptedJSON[];
+}
+
+export type ScrambleSetEncryptedJSON =
+  | ScrambleSetEncryptedBulkJSON
+  | ScrambleSetEncryptedPerAttemptJSON;
 
 export interface PartialCompetitionScramblesRoundJSON<T> {
   scrambleSetCount: number;

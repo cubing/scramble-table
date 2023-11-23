@@ -1,7 +1,12 @@
 import { encryptJSON } from "../lib/encryption/passcode-encryption";
 import {
+  multiScramblesEncryptedPerAttemptEvents,
+  tnoodleEventNameMappings,
+} from "../lib/eventMetadata";
+import {
   PartialCompetitionScramblesJSON,
   ScrambleSetEncryptedJSON,
+  ScrambleSetEncryptedPerAttemptJSON,
   ScrambleSetJSON,
 } from "../lib/json/format";
 
@@ -19,39 +24,13 @@ export async function encryptScrambles(
     passcodeTable[key] = value;
   }
 
-  // From: https://github.com/thewca/tnoodle/blob/2d9ef27d95eec86367a592210ebc6e45558516aa/tnoodle-ui/src/test/mock/tnoodle.api.test.mock.ts#L14
-  const tnoodleEventNameMappings: Record<string, string> = {
-    "333": "3x3x3",
-    "222": "2x2x2",
-    "444": "4x4x4",
-    "555": "5x5x5",
-    "666": "6x6x6",
-    "777": "7x7x7",
-    "333bf": "3x3x3 Blindfolded",
-    "333fm": "3x3x3 Fewest Moves",
-    "333oh": "3x3x3 One-Handed",
-    clock: "Clock",
-    minx: "Megaminx",
-    pyram: "Pyraminx",
-    skewb: "Skewb",
-    sq1: "Square-1",
-    "444bf": "4x4x4 Blindfolded",
-    "555bf": "5x5x5 Blindfolded",
-    // "333mbf": "3x3x3 Multiple Blindfolded", // TODO
-  };
-
-  function passcodeForScrambleSet(
+  function passcodeForScrambleSetOrAttempt(
     eventID: string,
     roundNumber: number,
     scrambleSetNumber: number,
     onlyScrambleSetForRound: boolean,
+    attemptID?: string, // Required for `multiScramblesEncryptedPerAttemptEvents` events.
   ): string {
-    if (eventID === "333mbf") {
-      // TODO
-      console.error("Multi-Blind is not yet supported.");
-      throw new Error("Multi-Blind is not yet supported.");
-      // exit(1);
-    }
     if (eventID === "clock") {
       // TODO
       console.warn(
@@ -62,6 +41,12 @@ export async function encryptScrambles(
     key += ` Round ${roundNumber}`;
     if (!onlyScrambleSetForRound) {
       key += ` Scramble Set ${String.fromCharCode(64 + scrambleSetNumber)}`;
+    }
+    if (multiScramblesEncryptedPerAttemptEvents[eventID]) {
+      if (!attemptID) {
+        throw new Error(`Attempt ID required for event: ${eventID}`);
+      }
+      key += ` Attempt ${attemptID}`;
     }
     const passcode = passcodeTable[key];
     if (!passcode) {
@@ -79,35 +64,72 @@ export async function encryptScrambles(
         scrambleSetNumberZeroIndexed,
         scrambleSet,
       ] of oldScrambleSets.entries()) {
-        console.log(
-          `[${event.id}][Round ${roundNumberZeroIndexed + 1}][Scramble set ${
-            scrambleSetNumberZeroIndexed + 1
-          }] Encrypting…`,
-        );
         const onlyScrambleSetForRound = round.scrambleSetCount === 1;
-        const passcode = passcodeForScrambleSet(
-          event.id,
-          roundNumberZeroIndexed + 1,
-          scrambleSetNumberZeroIndexed + 1,
-          onlyScrambleSetForRound,
-        );
-        const ciphertext = await encryptJSON(scrambleSet, passcode);
-        newScrambleSets.push({
-          id: scrambleSet.id,
-          ciphertext,
-        });
-        console.log(" Done!\n");
+        if (multiScramblesEncryptedPerAttemptEvents[event.id]) {
+          const encryptedScrambleSetJSON: ScrambleSetEncryptedPerAttemptJSON = {
+            id: scrambleSet.id,
+            encryptedScrambles: [],
+            encryptedExtraScrambles: [],
+          };
+          for (const key of ["scrambles", "extraScrambles"] as const) {
+            for (const [attemptNumberZeroIndexed, scrambles] of scrambleSet[
+              key
+            ].entries()) {
+              const extra = key === "extraScrambles";
+              const encryptedField = extra
+                ? encryptedScrambleSetJSON.encryptedExtraScrambles
+                : encryptedScrambleSetJSON.encryptedScrambles;
+              const attemptID =
+                (extra ? "E" : "") + (attemptNumberZeroIndexed + 1);
+              console.log(
+                `[${event.id}][Round ${
+                  roundNumberZeroIndexed + 1
+                }][Scramble set ${
+                  scrambleSetNumberZeroIndexed + 1
+                }][Attempt ${attemptID}] Encrypting…`,
+              );
+              const passcode = passcodeForScrambleSetOrAttempt(
+                event.id,
+                roundNumberZeroIndexed + 1,
+                scrambleSetNumberZeroIndexed + 1,
+                onlyScrambleSetForRound,
+                attemptID,
+              );
+              encryptedField.push(await encryptJSON(scrambles, passcode));
+              console.log("Done!");
+            }
+          }
+          newScrambleSets.push(encryptedScrambleSetJSON);
+        } else {
+          console.log(
+            `[${event.id}][Round ${roundNumberZeroIndexed + 1}][Scramble set ${
+              scrambleSetNumberZeroIndexed + 1
+            }] Encrypting…`,
+          );
+          const passcode = passcodeForScrambleSetOrAttempt(
+            event.id,
+            roundNumberZeroIndexed + 1,
+            scrambleSetNumberZeroIndexed + 1,
+            onlyScrambleSetForRound,
+          );
+          const ciphertext = await encryptJSON(scrambleSet, passcode);
+          newScrambleSets.push({
+            id: scrambleSet.id,
+            ciphertext,
+          });
+          console.log("Done!");
+        }
       }
     }
   }
   const competitionScramblesEncryptedJSON =
     competitionScramblesJSON as unknown as PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>;
   competitionScramblesEncryptedJSON.encryptedScrambles = true;
-  const outputFileContents = JSON.stringify(
-    competitionScramblesEncryptedJSON,
-    null,
-    "  ",
-  );
+  // const outputFileContents = JSON.stringify(
+  //   competitionScramblesEncryptedJSON,
+  //   null,
+  //   "  ",
+  // );
 
-  return competitionScramblesJSON as unknown as PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>;
+  return competitionScramblesEncryptedJSON as unknown as PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>;
 }

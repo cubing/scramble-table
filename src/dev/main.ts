@@ -19,15 +19,16 @@ app.displays[0].setScramble({
   roundNumber: 1,
   scrambleSetNumber: 1,
   attemptID: "4",
-  passcode: "j2wuv8bd",
+  passcode: "ew9pyvnt",
 });
 
 app.displays[1].setScramble({
-  competitorName: "Lars Petrus",
+  competitorName: "Amelia Multicube",
   competitorCompetitionID: 11,
-  eventID: "333",
+  eventID: "333mbf",
   roundNumber: 1,
   scrambleSetNumber: 2,
-  attemptID: "E1",
-  passcode: "umb3ea8e",
+  attemptID: "1",
+  passcode: "d7uhhs8j",
+  numSubScrambles: 10,
 });
