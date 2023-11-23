@@ -47,7 +47,9 @@ import { encryptScrambles } from "./encrypt";
   const passcodesInputFileText = await readFile(passcodesInputFile, "utf-8");
 
   const outputFileContents = JSON.stringify(
-    encryptScrambles(competitionScramblesJSON, passcodesInputFileText),
+    await encryptScrambles(competitionScramblesJSON, passcodesInputFileText),
+    null,
+    "  ",
   );
 
   assert(!outputFileContents.includes("scrambles")); // Simple check for unexpected scrambles left in the data.

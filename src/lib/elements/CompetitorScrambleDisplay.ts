@@ -32,6 +32,10 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   async setScramble(info: AttemptScrambleInfo): Promise<void> {
     this.classList.remove("scramble-signed");
     this.#info = info;
+    if (info.eventID === "333mbf") {
+      this.querySelector(".multi").hidden = false;
+      this.querySelector(".multi").textContent = "40";
+    }
 
     const scramble = await this.sharedState.scrambleJSONCache.getScramble(info);
 

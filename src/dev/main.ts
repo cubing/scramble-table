@@ -25,7 +25,7 @@ app.displays[0].setScramble({
 app.displays[1].setScramble({
   competitorName: "Lars Petrus",
   competitorCompetitionID: 11,
-  eventID: "333",
+  eventID: "333mbf",
   roundNumber: 1,
   scrambleSetNumber: 2,
   attemptID: "E1",
