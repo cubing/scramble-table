@@ -72,7 +72,6 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     const scrambleStringOrStrings =
       await this.sharedState.scrambleJSONCache.getScrambleStringOrStrings(info);
     if (typeof scrambleStringOrStrings === "string") {
-      console.log(this);
       this.classList.remove("show-multi");
       this.querySelector("twisty-player").alg = scrambleStringOrStrings;
       multiElem.hidden = true;
