@@ -28,11 +28,11 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       this.querySelector("twisty-player");
     this.querySelector<HTMLButtonElement>(".multi .previous").addEventListener(
       "click",
-      () => this.#onCurrentSubScrambleIncrement(-1),
+      () => this.#currentSubScrambleDelta(-1),
     );
     this.querySelector<HTMLButtonElement>(".multi .next").addEventListener(
       "click",
-      () => this.#onCurrentSubScrambleIncrement(1),
+      () => this.#currentSubScrambleDelta(1),
     );
   }
 
@@ -63,19 +63,19 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       multiElem.hidden = true;
     } else {
       this.#currentSubScrambleStrings = scrambleStringOrStrings;
-      this.querySelector("twisty-player").alg = scrambleStringOrStrings[0];
       this.#currentSubScrambleIndex = 0;
       multiElem.hidden = false;
       this.querySelector(
         ".multi .total-sub-scramble-num",
       ).textContent = `${scrambleStringOrStrings.length}`;
     }
+    this.#currentSubScrambleSetIndex(0);
   }
 
   #currentSubScrambleIndex = 0;
   #currentSubScrambleStrings: string[] = [];
-  #onCurrentSubScrambleIncrement(delta: number) {
-    this.#currentSubScrambleIndex += delta;
+  #currentSubScrambleSetIndex(idx: number) {
+    this.#currentSubScrambleIndex = idx;
     this.#currentSubScrambleIndex = Math.max(0, this.#currentSubScrambleIndex);
     this.#currentSubScrambleIndex = Math.min(
       this.#currentSubScrambleIndex,
@@ -86,6 +86,14 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.querySelector(".multi .current-sub-scramble-num").textContent = `${
       this.#currentSubScrambleIndex + 1
     }`;
+    this.querySelector<HTMLButtonElement>(".multi .previous").disabled =
+      idx === 0;
+    this.querySelector<HTMLButtonElement>(".multi .next").disabled =
+      idx === this.#currentSubScrambleStrings.length - 1;
+  }
+
+  #currentSubScrambleDelta(delta: number) {
+    this.#currentSubScrambleSetIndex(this.#currentSubScrambleIndex + delta);
   }
 
   #setField(field: string, text: string): void {
