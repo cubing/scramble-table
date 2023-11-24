@@ -25,13 +25,9 @@ class MultiBlindGridDisplay extends HTMLElement {
   }
 
   setNumColumnsAndRows(numCols: number, numRows: number): void {
-    this.#columnCSS.textContent = `
-    multi-blind-grid-display>.wrapper {
-      grid-template-columns: repeat(${numCols}, 1fr);
-      grid-template-rows: repeat(${numRows}, 1fr);
-      aspect-ratio: ${numCols}/${numRows};
-    }
-    `;
+    this.#wrapper.style.gridTemplateColumns = `repeat(${numCols}, 1fr)`;
+    this.#wrapper.style.gridTemplateRows = `repeat(${numCols}, 1fr)`;
+    this.#wrapper.style.aspectRatio = `${numCols}/${numRows}`;
   }
 
   setScrambles(scrambles: (Alg | string)[]): void {
