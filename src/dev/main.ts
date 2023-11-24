@@ -30,5 +30,5 @@ app.displays[1].setScramble({
   scrambleSetNumber: 2,
   attemptID: "1",
   passcode: "54ddk4a2",
-  numSubScrambles: 10,
+  numSubScrambles: 23,
 });

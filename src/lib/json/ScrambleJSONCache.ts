@@ -114,11 +114,11 @@ export class ScrambleJSONCache {
         info.passcode,
       );
       if (info.attemptID.startsWith("E")) {
-        return [
-          scrambleSetJSON.extraScrambles[parseInt(info.attemptID.slice(1)) - 1],
+        return scrambleSetJSON.extraScrambles[
+          parseInt(info.attemptID.slice(1)) - 1
         ];
       } else {
-        return [scrambleSetJSON.scrambles[parseInt(info.attemptID) - 1]];
+        return scrambleSetJSON.scrambles[parseInt(info.attemptID) - 1];
       }
     }
   }

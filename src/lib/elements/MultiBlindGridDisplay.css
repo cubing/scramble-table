@@ -1,0 +1,34 @@
+multi-blind-grid-display {
+  place-content: center;
+  max-height: 100%;
+  max-width: 100%;
+  contain: size;
+  padding: 0.5em;
+}
+
+multi-blind-grid-display>.wrapper {
+  max-height: 100%;
+  max-width: 100%;
+  display: grid;
+  margin: auto;
+  box-sizing: content-box;
+}
+
+multi-blind-grid-display twisty-player {
+  overflow: hidden;
+  width: auto;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 /1;
+  border: 4px solid black;
+  box-sizing: border-box;
+}
+
+multi-blind-grid-display twisty-player:hover {
+  cursor: pointer;
+  border-color: rgba(255, 255, 255, 1);
+}
+
+multi-blind-grid-display twisty-player.highlighted {
+  border-color: rgba(192, 192, 192, 1);
+}

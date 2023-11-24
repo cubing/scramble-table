@@ -11,6 +11,8 @@ import templateHTML from "./CompetitorScrambleDisplay.template.html";
 import type { SharedState } from "./SharedState";
 import { addCSS, parseHTML } from "./html";
 
+import "./MultiBlindGridDisplay";
+
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
 
@@ -34,11 +36,22 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       "click",
       () => this.#currentSubScrambleDelta(1),
     );
+    this.querySelector<HTMLButtonElement>(".multi .all").addEventListener(
+      "click",
+      () => this.#toggleShowAllSubScrambles(),
+    );
+    this.querySelector("multi-blind-grid-display").addEventListener(
+      "scramble-clicked",
+      (e: CustomEvent<{ idx: number }>) => {
+        this.#currentSubScrambleSetIndex(e.detail.idx);
+      },
+    );
   }
 
   #info: AttemptScrambleInfo | undefined;
   async setScramble(info: AttemptScrambleInfo): Promise<void> {
     this.classList.remove("scramble-signed");
+    this.#toggleShowAllSubScrambles(false);
     this.#info = info;
 
     let competitorField = info.competitorName;
@@ -59,22 +72,41 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     const scrambleStringOrStrings =
       await this.sharedState.scrambleJSONCache.getScrambleStringOrStrings(info);
     if (typeof scrambleStringOrStrings === "string") {
+      console.log(this);
+      this.classList.remove("show-multi");
       this.querySelector("twisty-player").alg = scrambleStringOrStrings;
       multiElem.hidden = true;
     } else {
+      this.classList.add("show-multi");
       this.#currentSubScrambleStrings = scrambleStringOrStrings;
       this.#currentSubScrambleIndex = 0;
       multiElem.hidden = false;
       this.querySelector(
         ".multi .total-sub-scramble-num",
       ).textContent = `${scrambleStringOrStrings.length}`;
+      this.querySelector("multi-blind-grid-display").setScrambles(
+        scrambleStringOrStrings,
+      );
+      this.#currentSubScrambleSetIndex(0);
     }
-    this.#currentSubScrambleSetIndex(0);
+  }
+
+  #toggleShowAllSubScrambles(forceShow?: boolean) {
+    if (typeof forceShow === "undefined") {
+      // biome-ignore lint/style/noParameterAssign: 🤷
+      forceShow = this.querySelector("multi-blind-grid-display").hidden;
+    }
+
+    this.querySelector("twisty-player").hidden = forceShow;
+    this.classList.toggle("show-multi-grid", forceShow);
+    this.querySelector("multi-blind-grid-display").hidden = !forceShow;
   }
 
   #currentSubScrambleIndex = 0;
   #currentSubScrambleStrings: string[] = [];
   #currentSubScrambleSetIndex(idx: number) {
+    this.#toggleShowAllSubScrambles(false);
+
     this.#currentSubScrambleIndex = idx;
     this.#currentSubScrambleIndex = Math.max(0, this.#currentSubScrambleIndex);
     this.#currentSubScrambleIndex = Math.min(
@@ -90,6 +122,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       idx === 0;
     this.querySelector<HTMLButtonElement>(".multi .next").disabled =
       idx === this.#currentSubScrambleStrings.length - 1;
+    this.querySelector("multi-blind-grid-display").setHighlightIndex(idx);
   }
 
   #currentSubScrambleDelta(delta: number) {
