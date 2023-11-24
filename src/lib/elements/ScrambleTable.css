@@ -37,7 +37,7 @@ scramble-table>header button.settings-button:hover {
 
 scramble-table scramble-table-contents {
   display: grid;
-  grid-template-columns: repeat(auto-fit, max(1fr, 256px));
+  grid-auto-columns: 1fr;
   grid-auto-flow: column;
   gap: 2em;
 }
