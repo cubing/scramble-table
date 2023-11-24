@@ -91,10 +91,18 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     }
   }
 
+  #showingMultiScrambles(): boolean {
+    return this.classList.contains("show-multi");
+  }
+
+  #showingAllSubScrambles(): boolean {
+    return !this.querySelector("multi-blind-grid-display").hidden;
+  }
+
   #toggleShowAllSubScrambles(forceShow?: boolean) {
     if (typeof forceShow === "undefined") {
       // biome-ignore lint/style/noParameterAssign: 🤷
-      forceShow = this.querySelector("multi-blind-grid-display").hidden;
+      forceShow = this.#showingAllSubScrambles();
     }
 
     this.querySelector("twisty-player").hidden = forceShow;
@@ -145,6 +153,25 @@ export class CompetitorScrambleDisplay extends HTMLElement {
 
   markAsSigned() {
     this.classList.add("scramble-signed");
+  }
+
+  // - If showing an individual multi scramble:
+  //   - Advance to the next scramble, or to the "Show All" view.
+  // - Else: Mark as signed
+  advanceOrMarkAsSigned() {
+    console.log(this.#showingMultiScrambles(), this.#showingAllSubScrambles());
+    if (this.#showingMultiScrambles() && !this.#showingAllSubScrambles()) {
+      const showingLastSubScramble =
+        this.#currentSubScrambleIndex ===
+        this.#currentSubScrambleStrings.length - 1;
+      if (showingLastSubScramble) {
+        this.#toggleShowAllSubScrambles(true);
+      } else {
+        this.#currentSubScrambleDelta(1);
+      }
+      return;
+    }
+    this.markAsSigned();
   }
 }
 
