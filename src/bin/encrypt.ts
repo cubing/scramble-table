@@ -125,11 +125,6 @@ export async function encryptScrambles(
   const competitionScramblesEncryptedJSON =
     competitionScramblesJSON as unknown as PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>;
   competitionScramblesEncryptedJSON.encryptedScrambles = true;
-  // const outputFileContents = JSON.stringify(
-  //   competitionScramblesEncryptedJSON,
-  //   null,
-  //   "  ",
-  // );
 
   return competitionScramblesEncryptedJSON as unknown as PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>;
 }
