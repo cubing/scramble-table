@@ -19,6 +19,7 @@ export const tnoodleEventNameMappings = {
   "333mbf": "3x3x3 Multiple Blindfolded",
 } as const;
 
+// TODO: distinguish between multi-scrambles and per-attempt encypted scrambles.
 export const multiScramblesEncryptedPerAttemptEvents: Partial<
   Record<keyof typeof tnoodleEventNameMappings, boolean>
 > = {
