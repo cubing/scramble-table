@@ -52,6 +52,7 @@ class MultiBlindGridDisplay extends HTMLElement {
     this.setNumColumnsAndRows(numCols, numRows);
     for (const [i, scramble] of scrambles.entries()) {
       this.#subScrambleElems[i].alg = scramble;
+      this.#subScrambleElems[i].timestamp = "end";
     }
   }
 

@@ -74,6 +74,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     if (typeof scrambleStringOrStrings === "string") {
       this.classList.remove("show-multi");
       this.querySelector("twisty-player").alg = scrambleStringOrStrings;
+      this.querySelector("twisty-player").timestamp = "end";
       multiElem.hidden = true;
     } else {
       this.classList.add("show-multi");
@@ -114,6 +115,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     );
     this.querySelector("twisty-player").alg =
       this.#currentSubScrambleStrings[this.#currentSubScrambleIndex];
+    this.querySelector("twisty-player").timestamp = "end";
     this.querySelector(".multi .current-sub-scramble-num").textContent = `${
       this.#currentSubScrambleIndex + 1
     }`;
