@@ -19,7 +19,7 @@ app.displays[0].setScramble({
   roundNumber: 1,
   scrambleSetNumber: 1,
   attemptID: "4",
-  passcode: "ew9pyvnt",
+  passcode: "girer6nx",
 });
 
 app.displays[1].setScramble({
@@ -29,6 +29,6 @@ app.displays[1].setScramble({
   roundNumber: 1,
   scrambleSetNumber: 2,
   attemptID: "1",
-  passcode: "d7uhhs8j",
+  passcode: "54ddk4a2",
   numSubScrambles: 10,
 });
