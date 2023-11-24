@@ -21,4 +21,7 @@ export const tnoodleEventNameMappings = {
 
 export const multiScramblesEncryptedPerAttemptEvents: Partial<
   Record<keyof typeof tnoodleEventNameMappings, boolean>
-> = { "333mbf": true };
+> = {
+  "333fm": true,
+  "333mbf": true,
+};
