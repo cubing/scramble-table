@@ -23,24 +23,24 @@ export class CompetitorScrambleDisplay extends HTMLElement {
 
   connectedCallback() {
     this.append(template.content.cloneNode(true));
-    this.querySelector(".set-scrambler").addEventListener("click", () =>
+    this.querySelector(".set-scrambler")!.addEventListener("click", () =>
       this.#onSetScrambler(),
     );
-    this.querySelector("twisty-alg-viewer").twistyPlayer =
+    this.querySelector("twisty-alg-viewer")!.twistyPlayer =
       this.querySelector("twisty-player");
-    this.querySelector<HTMLButtonElement>(".multi .previous").addEventListener(
+    this.querySelector<HTMLButtonElement>(".multi .previous")!.addEventListener(
       "click",
       () => this.#currentSubScrambleDelta(-1),
     );
-    this.querySelector<HTMLButtonElement>(".multi .next").addEventListener(
+    this.querySelector<HTMLButtonElement>(".multi .next")!.addEventListener(
       "click",
       () => this.#currentSubScrambleDelta(1),
     );
-    this.querySelector<HTMLButtonElement>(".multi .all").addEventListener(
+    this.querySelector<HTMLButtonElement>(".multi .all")!.addEventListener(
       "click",
       () => this.#toggleShowAllSubScrambles(),
     );
-    this.querySelector("multi-blind-grid-display").addEventListener(
+    this.querySelector("multi-blind-grid-display")!.addEventListener(
       "scramble-clicked",
       (e: CustomEvent<{ idx: number }>) => {
         this.#currentSubScrambleSetIndex(e.detail.idx);

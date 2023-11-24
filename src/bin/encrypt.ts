@@ -1,9 +1,9 @@
 import { encryptJSON } from "../lib/encryption/passcode-encryption";
 import {
+  eventName,
   multiScramblesEncryptedPerAttemptEvents,
-  tnoodleEventNameMappings,
 } from "../lib/eventMetadata";
-import {
+import type {
   PartialCompetitionScramblesJSON,
   ScrambleSetEncryptedJSON,
   ScrambleSetEncryptedPerAttemptJSON,
@@ -37,7 +37,7 @@ export async function encryptScrambles(
         "WARNING: clock scramble display does not support pins yet.",
       );
     }
-    let key = tnoodleEventNameMappings[eventID];
+    let key = eventName(eventID);
     key += ` Round ${roundNumber}`;
     if (!onlyScrambleSetForRound) {
       key += ` Scramble Set ${String.fromCharCode(64 + scrambleSetNumber)}`;
@@ -50,7 +50,7 @@ export async function encryptScrambles(
     }
     const passcode = passcodeTable[key];
     if (!passcode) {
-      throw new Error("Could not find passcode");
+      throw new Error(`Could not find passcode for key: ${key}`);
     }
     return passcode;
   }
