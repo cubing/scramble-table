@@ -39,9 +39,7 @@ export async function encryptScrambles(
     }
     let key = eventName(eventID);
     key += ` Round ${roundNumber}`;
-    if (!onlyScrambleSetForRound) {
-      key += ` Scramble Set ${String.fromCharCode(64 + scrambleSetNumber)}`;
-    }
+    key += ` Scramble Set ${String.fromCharCode(64 + scrambleSetNumber)}`;
     if (multiScramblesEncryptedPerAttemptEvents[eventID]) {
       if (!attemptID) {
         throw new Error(`Attempt ID required for event: ${eventID}`);
