@@ -31,12 +31,6 @@ export async function encryptScrambles(
     onlyScrambleSetForRound: boolean,
     attemptID?: string, // Required for `multiScramblesEncryptedPerAttemptEvents` events.
   ): string {
-    if (eventID === "clock") {
-      // TODO
-      console.warn(
-        "WARNING: clock scramble display does not support pins yet.",
-      );
-    }
     let key = eventName(eventID);
     key += ` Round ${roundNumber}`;
     key += ` Scramble Set ${String.fromCharCode(64 + scrambleSetNumber)}`;
