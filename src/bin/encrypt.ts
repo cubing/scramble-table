@@ -73,6 +73,16 @@ export async function encryptScrambles(
                 : encryptedScrambleSetJSON.encryptedScrambles;
               const attemptID =
                 (extra ? "E" : "") + (attemptNumberZeroIndexed + 1);
+              if (event.id === "333mbf" && scrambles === "") {
+                console.warn(
+                  `[${event.id}][Round ${
+                    roundNumberZeroIndexed + 1
+                  }][Scramble set ${
+                    scrambleSetNumberZeroIndexed + 1
+                  }][Attempt ${attemptID}] Skipping empty extra scrambles for 3x3x3 Multi-Blind.`,
+                );
+                continue;
+              }
               console.log(
                 `[${event.id}][Round ${
                   roundNumberZeroIndexed + 1
