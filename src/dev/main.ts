@@ -13,10 +13,10 @@ app.displays[0].setScramble({
   competitorName: "Amelia Multicube",
   competitorCompetitionID: 11,
   eventID: "333mbf",
-  roundNumber: 1,
-  scrambleSetNumber: 2,
-  attemptID: "1",
-  passcode: "54ddk4a2",
+  roundNumber: 3,
+  scrambleSetNumber: 1,
+  attemptID: "2",
+  passcode: "uce4zdvm",
   numSubScrambles: 23,
 });
 
