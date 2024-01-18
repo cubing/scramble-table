@@ -19,6 +19,8 @@ function maybeEnableDownload() {
   }
 }
 
+const addFTOButton = document.querySelector<HTMLInputElement>("#add-fto")!;
+
 const passcodeChars = "23456789abcdefghijkmnpqrstuvwxyz".split("");
 function generatePasscode(): string {
   return new Array(8)
@@ -74,6 +76,11 @@ async function addFTO(
   };
   scrambleJSON.wcif.events.push(event);
 
+  download(
+    "scrambles.UNENCRYPTED.json",
+    JSON.stringify(scrambleJSON, null, "  "),
+  );
+  download("Passcodes.txt", passcodesFile);
   return [scrambleJSON, passcodesFile];
 }
 
@@ -88,18 +95,11 @@ function download(filename: string, text: string) {
 }
 
 downloadButton.addEventListener("click", async () => {
-  const [modifiedScrambleJSON, modifiedPasscodesFile] = await addFTO(
-    scrambleJSON,
-    passcodesFile,
-  );
+  const [modifiedScrambleJSON, modifiedPasscodesFile] = addFTOButton.checked
+    ? await addFTO(scrambleJSON, passcodesFile)
+    : [scrambleJSON, passcodesFile];
   console.log(modifiedScrambleJSON);
   console.log(modifiedPasscodesFile);
-
-  download(
-    "scrambles.UNENCRYPTED.json",
-    JSON.stringify(modifiedScrambleJSON, null, "  "),
-  );
-  download("Passcodes.txt", modifiedPasscodesFile);
 
   const file = await encryptScrambles(
     modifiedScrambleJSON!,
