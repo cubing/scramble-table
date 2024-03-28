@@ -196,7 +196,11 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     const setScramblerButton = this.querySelector(".set-scrambler");
     setScramblerButton.textContent = "Please identify this scrambler…";
     const name = await this.sharedState.setScramblerCallback(this.displayIndex);
-    this.#setField("scrambler-name", `Scrambler: ${name}`);
+    if (name === null) {
+      this.#setField("scrambler-name", "Scrambler: (unassigned)");
+    } else {
+      this.#setField("scrambler-name", `Scrambler: ${name}`);
+    }
     setScramblerButton.textContent =
       setScramblerButton.getAttribute("data-original-text");
   }
