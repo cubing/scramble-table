@@ -1,6 +1,6 @@
 # `scramble-table`
 
-A scramble table library for WCA competitions.
+A UI for physical scramble tables at cubing competitions.
 
 ## Example
 

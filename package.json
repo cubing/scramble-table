@@ -1,5 +1,6 @@
 {
   "name": "@cubing/scramble-table",
+  "description": "A UI for physical scramble tables at cubing competitions.",
   "version": "0.2.4",
   "type": "module",
   "publishConfig": {
@@ -17,9 +18,7 @@
   "engines": {
     "node": ">=19"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "make build",
     "prepublishOnly": "make prepublishOnly"
