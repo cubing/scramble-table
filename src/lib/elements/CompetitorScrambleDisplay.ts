@@ -148,12 +148,10 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   }
 
   #toggleShowAllSubScrambles(forceShow?: boolean) {
-    console.log("toggleShowAllSubScrambles");
     if (typeof forceShow === "undefined") {
       // biome-ignore lint/style/noParameterAssign: 🤷
       forceShow = !this.#showingAllSubScrambles();
     }
-    console.log({ forceShow });
 
     this.querySelector("twisty-player").hidden = forceShow;
     this.classList.toggle("show-multi-grid", forceShow);
