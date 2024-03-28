@@ -11,6 +11,7 @@ import templateHTML from "./CompetitorScrambleDisplay.template.html";
 import type { SharedState } from "./SharedState";
 import { addCSS, parseHTML } from "./html";
 
+import { Alg } from "cubing/alg";
 import "./MultiBlindGridDisplay";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
@@ -40,12 +41,53 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       "click",
       () => this.#toggleShowAllSubScrambles(),
     );
+    this.querySelector(".clear-scramble")!.addEventListener("click", () =>
+      this.#clearScramble(),
+    );
     this.querySelector("multi-blind-grid-display")!.addEventListener(
       "scramble-clicked",
       (e: CustomEvent<{ idx: number }>) => {
         this.#currentSubScrambleSetIndex(e.detail.idx);
       },
     );
+    this.#initializeAdditionalActions();
+  }
+
+  // TODO: unify dialog code with main settings
+  #initializeAdditionalActions() {
+    this.querySelector(".additional-actions-button").addEventListener(
+      "click",
+      () => {
+        this.#showAdditionalActions();
+      },
+    );
+
+    this.querySelector(".additional-actions button.close").addEventListener(
+      "click",
+      () => {
+        this.#hideAdditionalActions();
+      },
+    );
+  }
+
+  #showAdditionalActions() {
+    this.querySelector<HTMLDialogElement>(".additional-actions").showModal();
+  }
+
+  #hideAdditionalActions() {
+    this.querySelector<HTMLDialogElement>(".additional-actions").close();
+  }
+
+  #clearScramble() {
+    this.classList.remove("scramble-signed");
+    this.#toggleShowAllSubScrambles(false);
+    this.#setField("competitor", "");
+    this.#setField("event", "");
+    this.#setField("round", "");
+    this.#setField("scramble-set", "");
+    this.#setField("attempt", "");
+    this.querySelector("twisty-player").alg = new Alg();
+    this.#hideAdditionalActions();
   }
 
   #info: AttemptScrambleInfo | undefined;
@@ -141,7 +183,9 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   }
 
   #setField(field: string, text: string): void {
-    this.getElementsByClassName(field)[0].textContent = text;
+    for (const elem of this.getElementsByClassName(field)) {
+      elem.textContent = text;
+    }
   }
 
   async #onSetScrambler() {

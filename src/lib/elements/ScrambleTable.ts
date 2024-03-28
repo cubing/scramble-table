@@ -64,9 +64,12 @@ export class ScrambleTable
   }
 
   #initializeSettings() {
-    this.querySelector("header button").addEventListener("click", () => {
-      this.#showSettings();
-    });
+    this.querySelector("header .settings-button").addEventListener(
+      "click",
+      () => {
+        this.#showSettings();
+      },
+    );
 
     this.querySelector(
       ".scramble-table-settings button.close",

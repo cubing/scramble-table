@@ -99,3 +99,28 @@ competitor-scramble-display:not(.show-multi) .multi {
 competitor-scramble-display.show-multi-grid>twisty-player {
   display: none;
 }
+
+
+scramble-table .additional-actions {
+  border: 1px solid var(--scramble-table-border-color);
+  padding: 2em;
+  line-height: 1.5em;
+  color: var(--scramble-table-main-color);
+  backdrop-filter: blur(0.25em);
+  background: color-mix(in oklab, var(--scramble-table-background) 90%, transparent);
+}
+
+scramble-table .additional-actions h1 {
+  margin-top: 0;
+}
+
+scramble-table .additional-actions .close {
+  float: right;
+  position: relative
+}
+
+scramble-table dialog::backdrop {
+  background-color: #444;
+  opacity: 0.75;
+  z-index: 1;
+}

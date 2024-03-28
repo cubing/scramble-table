@@ -1,8 +1,9 @@
 <template>
   <div class="info">
-    <div class="split scrambler"><span class="scrambler-name">Scrambler</span><button class="set-scrambler"
-        data-original-text="Set scrambler">Set
-        scrambler</button></div>
+    <div class="split scrambler"><span class="scrambler-name">Scrambler</span><span><button class="set-scrambler"
+          data-original-text="Set scrambler">Set
+          scrambler</button>&nbsp;<button class="additional-actions-button"
+          title="Additional actions…">…</button></span></div>
     <div class="competitor"></div>
     <div class="split">
       <div class="event"></div>
@@ -23,4 +24,14 @@
     <button class="next">Next ➡️</button>
     <button class="all">Show All</button>
   </div>
+  <dialog class="additional-actions">
+    <button class="close">Close</button>
+    <br>
+    <br>
+    <h1>Additional&nbsp;actions</h1>
+    <h2>Scrambler: <span class="scrambler-name">Scrambler</span></h2>
+    <hr>
+    <br>
+    <span><button class="clear-scramble">Clear scramble</button></span>
+  </dialog>
 </template>
