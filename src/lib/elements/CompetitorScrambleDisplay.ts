@@ -87,6 +87,11 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.#setField("scramble-set", "");
     this.#setField("attempt", "");
     this.querySelector("twisty-player").alg = new Alg();
+    this.querySelector("multi-blind-grid-display").setScrambles([]);
+    this.querySelector(".multi .current-sub-scramble-num").textContent = "—";
+    this.querySelector(".multi .total-sub-scramble-num").textContent = "—";
+    this.querySelector<HTMLButtonElement>(".multi .next").disabled = true;
+    this.querySelector<HTMLButtonElement>(".multi .all").disabled = true;
     this.#hideAdditionalActions();
   }
 
@@ -130,6 +135,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
         scrambleStringOrStrings,
       );
       this.#currentSubScrambleSetIndex(0);
+      this.querySelector<HTMLButtonElement>(".multi .all").disabled = false;
     }
   }
 
