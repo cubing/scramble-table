@@ -23,7 +23,11 @@ function nextUnassigned(): string {
 }
 
 export class CompetitorScrambleDisplay extends HTMLElement {
-  constructor(private sharedState: SharedState, private displayIndex: number) {
+  constructor(
+    private sharedState: SharedState,
+    private displayIndex: number,
+    private onScrambleCleared: () => void,
+  ) {
     super();
   }
 
@@ -99,6 +103,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.querySelector<HTMLButtonElement>(".multi .next").disabled = true;
     this.querySelector<HTMLButtonElement>(".multi .all").disabled = true;
     this.#hideAdditionalActions();
+    this.onScrambleCleared();
   }
 
   #info: AttemptScrambleInfo | undefined;

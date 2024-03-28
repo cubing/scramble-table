@@ -9,6 +9,13 @@ declare global {
 const app = document.body.appendChild(new ScrambleTable());
 globalThis.app = app;
 
+app.addEventListener(
+  "scramble-cleared",
+  (e: CustomEvent<{ displayIndex: number }>) => {
+    console.log(`Scramble cleared for display index: ${e.detail.displayIndex}`);
+  },
+);
+
 app.displays[0].setScramble({
   competitorName: "Amelia Multicube",
   competitorCompetitionID: 11,

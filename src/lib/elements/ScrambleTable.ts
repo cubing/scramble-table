@@ -37,6 +37,12 @@ const DEFAULT_SET_SCRAMBLER_CALLBACK = async (
   return prompt(`Please enter the name of scrambler ${displayIndex + 1}:`);
 };
 
+/**
+ *
+ * Dispatches the following events:
+ *
+ * - `"scramble-cleared"`
+ */
 export class ScrambleTable
   extends HTMLElement
   implements ScrambleJSONCacheDelegate
@@ -61,6 +67,16 @@ export class ScrambleTable
       this.addDisplay();
     }
     this.#initializeSettings();
+  }
+
+  #onScrambleCleared(displayIndex: number) {
+    this.dispatchEvent(
+      new CustomEvent("scramble-cleared", {
+        detail: {
+          displayIndex,
+        },
+      }),
+    );
   }
 
   #initializeSettings() {
@@ -131,7 +147,9 @@ export class ScrambleTable
     const idx = this.displays.length;
     this.displays.push(
       this.querySelector("scramble-table-contents").appendChild(
-        new CompetitorScrambleDisplay(this.sharedState, idx),
+        new CompetitorScrambleDisplay(this.sharedState, idx, () => {
+          this.#onScrambleCleared(idx);
+        }),
       ),
     );
   }
