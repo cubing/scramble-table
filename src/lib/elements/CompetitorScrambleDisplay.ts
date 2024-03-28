@@ -17,6 +17,11 @@ import "./MultiBlindGridDisplay";
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
 
+let unassignedCounter = 0;
+function nextUnassigned(): string {
+  return `(unassigned #${++unassignedCounter})`;
+}
+
 export class CompetitorScrambleDisplay extends HTMLElement {
   constructor(private sharedState: SharedState, private displayIndex: number) {
     super();
@@ -24,6 +29,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
 
   connectedCallback() {
     this.append(template.content.cloneNode(true));
+    this.#setField("scrambler-name", nextUnassigned());
     this.querySelector(".set-scrambler")!.addEventListener("click", () =>
       this.#onSetScrambler(),
     );
@@ -195,12 +201,10 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   async #onSetScrambler() {
     const setScramblerButton = this.querySelector(".set-scrambler");
     setScramblerButton.textContent = "Please identify this scrambler…";
-    const name = await this.sharedState.setScramblerCallback(this.displayIndex);
-    if (name === null) {
-      this.#setField("scrambler-name", "Scrambler: (unassigned)");
-    } else {
-      this.#setField("scrambler-name", `Scrambler: ${name}`);
-    }
+    const name =
+      (await this.sharedState.setScramblerCallback(this.displayIndex)) ??
+      nextUnassigned();
+    this.#setField("scrambler-name", name);
     setScramblerButton.textContent =
       setScramblerButton.getAttribute("data-original-text");
   }
