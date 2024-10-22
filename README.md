@@ -2,6 +2,15 @@
 
 A UI for physical scramble tables at cubing competitions.
 
+## Run the demo
+
+```shell
+git clone https://github.com/cubing/scramble-table && cd scramble-table
+make setup
+
+make dev
+```
+
 ## Example
 
 <picture>

@@ -2,6 +2,10 @@
 .PHONY: build
 build: build-package build-types
 
+.PHONY: setup
+setup:
+	npm install
+
 .PHONY: build-package
 build-package:
 	node script/build-package.js
