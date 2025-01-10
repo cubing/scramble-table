@@ -3,7 +3,7 @@
 import { default as arrayBufferToHex } from "array-buffer-to-hex";
 import { default as hexToArrayBuffer } from "hex-to-array-buffer";
 
-import age from "age-encryption";
+import { Decrypter, Encrypter } from "age-encryption";
 
 const SCRYPT_WORK_FACTOR = 12;
 
@@ -11,19 +11,23 @@ export async function encryptJSON<T>(
   json: T,
   passcode: string,
 ): Promise<string> {
-  const encrypter = new (await age()).Encrypter();
+  const encrypter = new Encrypter();
   encrypter.setScryptWorkFactor(SCRYPT_WORK_FACTOR);
   encrypter.setPassphrase(passcode);
-  return arrayBufferToHex(encrypter.encrypt(JSON.stringify(json)));
+  return arrayBufferToHex(await encrypter.encrypt(JSON.stringify(json)));
 }
 
 export async function decryptJSON<T>(
   hexCiphertext: string,
   passcode: string,
 ): Promise<T> {
-  const decrypter = new (await age()).Decrypter();
+  const start = performance.now();
+  const decrypter = new Decrypter();
   decrypter.addPassphrase(passcode);
   return JSON.parse(
-    decrypter.decrypt(new Uint8Array(hexToArrayBuffer(hexCiphertext)), "text"),
+    await decrypter.decrypt(
+      new Uint8Array(hexToArrayBuffer(hexCiphertext)),
+      "text",
+    ),
   );
 }
