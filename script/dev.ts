@@ -1,7 +1,7 @@
 import { barelyServe } from "barely-a-dev-server";
 import { esbuildOptions } from "./esbuildOptions.js";
 
-barelyServe({
+await barelyServe({
   entryRoot: "src/dev",
   port: 3338,
   esbuildOptions,

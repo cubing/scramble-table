@@ -1,5 +1,5 @@
 import { build } from "esbuild";
-import { esbuildOptions } from "./esbuildOptions.js";
+import { esbuildOptions } from "./esbuildOptions";
 
 await build({
   entryPoints: ["src/bin/main.ts", "src/lib/index.ts"],
