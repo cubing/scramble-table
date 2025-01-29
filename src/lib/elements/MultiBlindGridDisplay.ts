@@ -1,4 +1,4 @@
-import { Alg } from "cubing/alg";
+import type { Alg } from "cubing/alg";
 import { TwistyPlayer } from "cubing/twisty";
 
 // @ts-ignore

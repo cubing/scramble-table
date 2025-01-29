@@ -28,7 +28,7 @@ addCSS(css);
 const NUM_SCRAMBLE_DISPLAYS_LOCALSTORAGE_KEY =
   "scrambleTableNumStorageDisplays";
 
-const DEFAULT_NUM_DISPLAYS = parseInt(
+const DEFAULT_NUM_DISPLAYS = Number.parseInt(
   localStorage[NUM_SCRAMBLE_DISPLAYS_LOCALSTORAGE_KEY] ?? 2,
 );
 const DEFAULT_SET_SCRAMBLER_CALLBACK = async (
@@ -121,7 +121,9 @@ export class ScrambleTable
     );
     numScrambleDisplaysInput.value = `${this.displays.length}`;
     numScrambleDisplaysInput.addEventListener("change", () => {
-      const newNumScrambleDisplays = parseInt(numScrambleDisplaysInput.value);
+      const newNumScrambleDisplays = Number.parseInt(
+        numScrambleDisplaysInput.value,
+      );
       while (this.displays.length < newNumScrambleDisplays) {
         this.addDisplay();
       }

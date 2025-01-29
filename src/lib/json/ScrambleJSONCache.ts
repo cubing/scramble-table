@@ -84,12 +84,12 @@ export class ScrambleJSONCache {
       if (info.attemptID.startsWith("E")) {
         ciphertext =
           scrambleSetEncryptedJSON.encryptedExtraScrambles[
-            parseInt(info.attemptID.slice(1)) - 1
+            Number.parseInt(info.attemptID.slice(1)) - 1
           ];
       } else {
         ciphertext =
           scrambleSetEncryptedJSON.encryptedScrambles[
-            parseInt(info.attemptID) - 1
+            Number.parseInt(info.attemptID) - 1
           ];
       }
       const scrambleStrings: string[] = (
@@ -104,22 +104,18 @@ export class ScrambleJSONCache {
         );
       }
       return scrambleStrings.slice(0, info.numSubScrambles);
-    } else {
-      const scrambleSetEncryptedJSON = event.rounds[info.roundNumber - 1]
-        .scrambleSets[
-        info.scrambleSetNumber - 1
-      ] as ScrambleSetEncryptedBulkJSON;
-      const scrambleSetJSON: ScrambleSetJSON = await decryptJSON(
-        scrambleSetEncryptedJSON.ciphertext,
-        info.passcode,
-      );
-      if (info.attemptID.startsWith("E")) {
-        return scrambleSetJSON.extraScrambles[
-          parseInt(info.attemptID.slice(1)) - 1
-        ];
-      } else {
-        return scrambleSetJSON.scrambles[parseInt(info.attemptID) - 1];
-      }
     }
+    const scrambleSetEncryptedJSON = event.rounds[info.roundNumber - 1]
+      .scrambleSets[info.scrambleSetNumber - 1] as ScrambleSetEncryptedBulkJSON;
+    const scrambleSetJSON: ScrambleSetJSON = await decryptJSON(
+      scrambleSetEncryptedJSON.ciphertext,
+      info.passcode,
+    );
+    if (info.attemptID.startsWith("E")) {
+      return scrambleSetJSON.extraScrambles[
+        Number.parseInt(info.attemptID.slice(1)) - 1
+      ];
+    }
+    return scrambleSetJSON.scrambles[Number.parseInt(info.attemptID) - 1];
   }
 }
