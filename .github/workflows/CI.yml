@@ -19,7 +19,7 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - run: npm install
+      - run: make setup
       - run: make build
       - run: make lint
       - run: make encrypt-fake-competition
