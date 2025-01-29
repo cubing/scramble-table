@@ -139,9 +139,8 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       this.#currentSubScrambleStrings = scrambleStringOrStrings;
       this.#currentSubScrambleIndex = 0;
       multiElem.hidden = false;
-      this.querySelector(
-        ".multi .total-sub-scramble-num",
-      ).textContent = `${scrambleStringOrStrings.length}`;
+      this.querySelector(".multi .total-sub-scramble-num").textContent =
+        `${scrambleStringOrStrings.length}`;
       this.querySelector("multi-blind-grid-display").setScrambles(
         scrambleStringOrStrings,
       );

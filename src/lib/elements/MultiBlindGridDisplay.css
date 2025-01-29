@@ -6,7 +6,7 @@ multi-blind-grid-display {
   padding: 0.5em;
 }
 
-multi-blind-grid-display>.wrapper {
+multi-blind-grid-display > .wrapper {
   max-height: 100%;
   max-width: 100%;
   display: grid;
@@ -19,7 +19,7 @@ multi-blind-grid-display twisty-player {
   width: auto;
   width: 100%;
   height: 100%;
-  aspect-ratio: 1 /1;
+  aspect-ratio: 1 / 1;
   border: 4px solid black;
   box-sizing: border-box;
 }

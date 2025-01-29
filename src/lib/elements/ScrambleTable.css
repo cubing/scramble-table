@@ -11,7 +11,7 @@ scramble-table {
   font-family: Ubuntu, Tahoma, sans-serif;
 }
 
-scramble-table>header {
+scramble-table > header {
   font-size: 2em;
   display: grid;
   grid-auto-flow: column;
@@ -19,18 +19,18 @@ scramble-table>header {
   align-items: center;
 }
 
-scramble-table>header button {
+scramble-table > header button {
   font-size: 1em;
 }
 
-scramble-table>header button.settings-button {
+scramble-table > header button.settings-button {
   font-size: 1em;
   background: none;
   color: var(--scramble-table-main-color);
-  border: none
+  border: none;
 }
 
-scramble-table>header button.settings-button:hover {
+scramble-table > header button.settings-button:hover {
   text-decoration: underline;
   cursor: pointer;
 }
@@ -48,7 +48,11 @@ scramble-table .scramble-table-settings {
   line-height: 1.5em;
   color: var(--scramble-table-main-color);
   backdrop-filter: blur(0.25em);
-  background: color-mix(in oklab, var(--scramble-table-background) 90%, transparent);
+  background: color-mix(
+    in oklab,
+    var(--scramble-table-background) 90%,
+    transparent
+  );
 }
 
 scramble-table .scramble-table-settings h1 {
@@ -57,7 +61,7 @@ scramble-table .scramble-table-settings h1 {
 
 scramble-table .scramble-table-settings .close {
   float: right;
-  position: relative
+  position: relative;
 }
 
 scramble-table dialog::backdrop {

@@ -1,25 +1,29 @@
 html {
-  --scramble-table-background: #FFF;
+  --scramble-table-background: #fff;
   --scramble-table-main-color: black;
-  --scramble-table-link-color: #00E;
-  --scramble-table-link-visited-color: #551A8B;
+  --scramble-table-link-color: #00e;
+  --scramble-table-link-visited-color: #551a8b;
 
-  --scramble-table-border-color: color-mix(in oklab, var(--scramble-table-main-color) 50%, transparent);
+  --scramble-table-border-color: color-mix(
+    in oklab,
+    var(--scramble-table-main-color) 50%,
+    transparent
+  );
 }
 
-html[data-color-mode=dark] {
+html[data-color-mode="dark"] {
   /* Keep in sync with the block below. */
-  --scramble-table-background: #000D;
-  --scramble-table-main-color: #EEE;
+  --scramble-table-background: #000d;
+  --scramble-table-main-color: #eee;
   --scramble-table-link-color: #669df5;
   --scramble-table-link-visited-color: #af73d5;
 }
 
 @media (prefers-color-scheme: dark) {
-  html:not([data-color-mode=light]) {
+  html:not([data-color-mode="light"]) {
     /* Keep in sync with the block above. */
-    --scramble-table-background: #000D;
-    --scramble-table-main-color: #EEE;
+    --scramble-table-background: #000d;
+    --scramble-table-main-color: #eee;
     --scramble-table-link-color: #669df5;
     --scramble-table-link-visited-color: #af73d5;
   }
