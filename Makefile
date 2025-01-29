@@ -5,7 +5,7 @@ build: build-package build-types
 .PHONY: setup
 setup:
 	@command -v bun > /dev/null || { echo "\nPlease install \`bun\` to work on this project:\n\n    # from npm\n    npm install --global bun\n\n    # macOS (Homebrew)\n    brew install oven-sh/bun/bun\n\n    # For other options, see: https://bun.sh/\n" && exit 1 ; }
-	bun install --save
+	bun install --no-save
 
 .PHONY: build-package
 build-package: setup
