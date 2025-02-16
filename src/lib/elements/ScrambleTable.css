@@ -6,11 +6,16 @@ scramble-table {
   margin: 0;
   display: grid;
   padding: 2em;
-  gap: 2em;
-  grid-template-rows: auto 1fr;
+  gap: 1em;
+
+  --scramble-table-matchup-selection-size: ;
+  grid-template-rows: auto var(--scramble-table-matchup-selection-size) 1fr;
   font-family: Ubuntu, Tahoma, sans-serif;
 }
 
+scramble-table:has(scramble-table-matchup-selection) {
+  --scramble-table-matchup-selection-size: auto;
+}
 scramble-table > header {
   font-size: 2em;
   display: grid;

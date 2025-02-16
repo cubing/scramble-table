@@ -13,6 +13,8 @@ import { addCSS, parseHTML } from "./html";
 
 import { Alg } from "cubing/alg";
 import "./MultiBlindGridDisplay";
+import type { ExperimentalMillisecondTimestamp } from "cubing/twisty";
+import { ResultEntry } from "./ResultEntry";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
@@ -22,8 +24,16 @@ function nextUnassigned(): string {
   return `(unassigned #${++unassignedCounter})`;
 }
 
+export interface CompetitorScrambleDisplayOptions {
+  resultsInput?: "hide" | "show";
+  generateScrambleButton?: "auto" | "hide" | "show";
+}
+
 export class CompetitorScrambleDisplay extends HTMLElement {
+  #resultEntry: ResultEntry | undefined;
+
   constructor(
+    private options: CompetitorScrambleDisplayOptions,
     private sharedState: SharedState,
     private displayIndex: number,
     private onScrambleCleared: () => void,
@@ -61,6 +71,15 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       },
     );
     this.#initializeAdditionalActions();
+    if (this.options.resultsInput === "show") {
+      this.append(
+        // biome-ignore lint/suspicious/noAssignInExpressions: DRY pattern
+        (this.#resultEntry = new ResultEntry(
+          this.displayIndex,
+          this.sharedState,
+        )),
+      );
+    }
   }
 
   // TODO: unify dialog code with main settings
@@ -104,6 +123,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.querySelector<HTMLButtonElement>(".multi .all").disabled = true;
     this.#hideAdditionalActions();
     this.onScrambleCleared();
+    this.#resultEntry?.reset();
   }
 
   #info: AttemptScrambleInfo | undefined;
@@ -206,8 +226,9 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     const setScramblerButton = this.querySelector(".set-scrambler");
     setScramblerButton.textContent = "Please identify this scrambler…";
     const name =
-      (await this.sharedState.setScramblerCallback(this.displayIndex)) ??
-      nextUnassigned();
+      (await this.sharedState.callbacks.setScramblerCallback?.(
+        this.displayIndex,
+      )) ?? nextUnassigned();
     this.#setField("scrambler-name", name);
     setScramblerButton.textContent =
       setScramblerButton.getAttribute("data-original-text");

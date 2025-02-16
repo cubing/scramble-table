@@ -1,5 +1,8 @@
 import "cubing/twisty";
-import { CompetitorScrambleDisplay } from "./CompetitorScrambleDisplay";
+import {
+  CompetitorScrambleDisplay,
+  type CompetitorScrambleDisplayOptions,
+} from "./CompetitorScrambleDisplay";
 
 import type {
   PartialCompetitionScramblesJSON,
@@ -13,6 +16,9 @@ import {
 import { addCSS, parseHTML } from "./html";
 
 import type {
+  MatchupID,
+  MatchupName,
+  ScrambleTableCallbacks,
   ScrambleTableInitializationOptions,
   SharedState,
 } from "./SharedState";
@@ -21,6 +27,7 @@ import type {
 import css from "./ScrambleTable.css";
 // @ts-ignore
 import templateHTML from "./ScrambleTable.template.html";
+import { ScrambleTableMatchupSelection } from "./ScrambleTableMatchupSelection";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
@@ -49,24 +56,40 @@ export class ScrambleTable
 {
   public displays: CompetitorScrambleDisplay[] = [];
   private sharedState: SharedState;
+  private competitorScrambleDisplayOptions: CompetitorScrambleDisplayOptions;
   constructor(options?: ScrambleTableInitializationOptions) {
     super();
     // TODO: Defer some of this to `connectedCallback`?
     this.append(template.content.cloneNode(true));
     const scrambleJSONCache = new ScrambleJSONCache(this); // TODO: place this in a less fragile location.
-    const setScramblerCallback =
-      options?.setScramblerCallback ?? DEFAULT_SET_SCRAMBLER_CALLBACK;
+    const callbacks: ScrambleTableCallbacks = {
+      setScramblerCallback: DEFAULT_SET_SCRAMBLER_CALLBACK,
+      ...options?.callbacks,
+    };
 
     this.sharedState = {
       scrambleJSONCache,
-      setScramblerCallback,
+      callbacks,
     };
+
+    this.competitorScrambleDisplayOptions =
+      options?.competitorScrambleDisplayOptions ?? {};
 
     const initialNumDisplays = options?.numDisplays ?? DEFAULT_NUM_DISPLAYS;
     for (let i = 0; i < initialNumDisplays; i++) {
       this.addDisplay();
     }
     this.#initializeSettings();
+
+    if (options?.showMatchupsSelection === "show") {
+      const scrambleTableMatchupSelection = new ScrambleTableMatchupSelection(
+        this.sharedState,
+      );
+      this.insertBefore(
+        scrambleTableMatchupSelection,
+        this.#scrambleTableContents,
+      );
+    }
   }
 
   #onScrambleCleared(displayIndex: number) {
@@ -145,13 +168,22 @@ export class ScrambleTable
     this.querySelector<HTMLDialogElement>(".scramble-table-settings").close();
   }
 
+  get #scrambleTableContents(): HTMLElement {
+    return this.querySelector("scramble-table-contents");
+  }
+
   addDisplay() {
     const idx = this.displays.length;
     this.displays.push(
-      this.querySelector("scramble-table-contents").appendChild(
-        new CompetitorScrambleDisplay(this.sharedState, idx, () => {
-          this.#onScrambleCleared(idx);
-        }),
+      this.#scrambleTableContents.appendChild(
+        new CompetitorScrambleDisplay(
+          this.competitorScrambleDisplayOptions,
+          this.sharedState,
+          idx,
+          () => {
+            this.#onScrambleCleared(idx);
+          },
+        ),
       ),
     );
   }

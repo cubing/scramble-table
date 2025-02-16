@@ -1,0 +1,21 @@
+scramble-table scramble-table-matchup-selection {
+  border: 1px solid currentColor;
+  padding: 0.5em;
+  color-scheme: light dark;
+  font-size: 1.25em;
+}
+
+scramble-table scramble-table-matchup-selection :is(select, button) {
+  font-size: 1em;
+}
+
+scramble-table .reset-current-matchup {
+  background: rgba(255, 95, 63, 0.5);
+}
+
+scramble-table-matchup-selection {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto;
+  align-items: center;
+  gap: 0.5em;
+}

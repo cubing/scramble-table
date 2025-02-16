@@ -5,3 +5,9 @@ addCSS(mainCSS);
 
 export { CompetitorScrambleDisplay } from "./elements/CompetitorScrambleDisplay";
 export { ScrambleTable } from "./elements/ScrambleTable";
+export type {
+  MatchupID,
+  MatchupName,
+  ResultForTimedAttempt,
+  ScrambleTableCallbacks,
+} from "./elements/SharedState";
