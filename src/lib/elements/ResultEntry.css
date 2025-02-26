@@ -1,0 +1,54 @@
+result-entry {
+  display: grid;
+  border-top: 1px solid;
+
+  color-scheme: light dark;
+}
+
+result-entry form > div {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+
+result-entry > form {
+  display: grid;
+  padding: 1em;
+}
+
+result-entry input {
+  width: 100%;
+  font-size: 1.75em;
+  margin-top: 0.25em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+result-entry .annotation.ready::after {
+  opacity: 30%;
+  content: "(press enter to submit)";
+}
+
+result-entry .annotation.submitting::after {
+  color: light-dark(#a6a631, yellow);
+  content: "(Submitting…)";
+}
+
+result-entry .annotation.success::after {
+  content: "(Submitted!)";
+  color: green;
+}
+
+result-entry .annotation.failed::after {
+  content: "(FAILED to submit)";
+  color: red;
+}
+
+result-entry input:invalid {
+  background: color-mix(in oklab, red 50%, transparent);
+}
+
+result-entry button {
+  font-size: 1.5em;
+}

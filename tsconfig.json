@@ -7,9 +7,8 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "dist/lib",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true // grrrrrrr https://github.com/oven-sh/bun/issues/8761
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

@@ -1,18 +1,25 @@
 import { eventInfo } from "cubing/puzzles";
 import "cubing/twisty";
 
-import type { AttemptScrambleInfo } from "../AttemptScrambleInfo";
+import type {
+  AttemptScrambleInfo,
+  MatchupAttemptScrambleInfo,
+} from "../AttemptScrambleInfo";
 
 // @ts-ignore
 import css from "./CompetitorScrambleDisplay.css";
 // @ts-ignore
 import templateHTML from "./CompetitorScrambleDisplay.template.html";
 
-import type { SharedState } from "./SharedState";
+import type {
+  MatchupCallbackIdentifyingInfo,
+  SharedState,
+} from "./SharedState";
 import { addCSS, parseHTML } from "./html";
 
 import { Alg } from "cubing/alg";
 import "./MultiBlindGridDisplay";
+import { ResultAdjustment } from "./ResultAdjustment";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
 addCSS(css);
@@ -22,10 +29,18 @@ function nextUnassigned(): string {
   return `(unassigned #${++unassignedCounter})`;
 }
 
+export interface CompetitorScrambleDisplayOptions {
+  resultInput?: "hide" | "show";
+  generateScrambleButton?: "auto" | "hide" | "show";
+}
+
 export class CompetitorScrambleDisplay extends HTMLElement {
+  #resultAdjustment: ResultAdjustment | undefined;
+
   constructor(
+    private options: CompetitorScrambleDisplayOptions,
     private sharedState: SharedState,
-    private displayIndex: number,
+    public readonly displayIndex: number,
     private onScrambleCleared: () => void,
   ) {
     super();
@@ -61,6 +76,12 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       },
     );
     this.#initializeAdditionalActions();
+    if (this.options.resultInput === "show") {
+      this.append(
+        // biome-ignore lint/suspicious/noAssignInExpressions: DRY pattern
+        (this.#resultAdjustment = new ResultAdjustment(this, this.sharedState)),
+      );
+    }
   }
 
   // TODO: unify dialog code with main settings
@@ -104,10 +125,14 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.querySelector<HTMLButtonElement>(".multi .all").disabled = true;
     this.#hideAdditionalActions();
     this.onScrambleCleared();
+    this.#resultAdjustment?.reset();
   }
 
   #info: AttemptScrambleInfo | undefined;
   async setScramble(info: AttemptScrambleInfo): Promise<void> {
+    const isMatchup = "matchupID" in info;
+    this.classList.toggle("matchup", isMatchup);
+
     this.classList.remove("scramble-signed");
     this.#toggleShowAllSubScrambles(false);
     this.#info = info;
@@ -120,33 +145,54 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     const eventInfoData = eventInfo(info.eventID);
 
     this.#setField("event", eventInfoData.eventName);
-    this.#setField("round", `Round ${info.roundNumber}`);
-    this.#setField("scramble-set", `Scramble Set ${info.scrambleSetNumber}`);
     this.#setField("attempt", `Attempt ${info.attemptID}`);
     this.querySelector("twisty-player").puzzle = eventInfoData.puzzleID;
-
-    const multiElem = this.querySelector<HTMLElement>(".multi");
-
-    const scrambleStringOrStrings =
-      await this.sharedState.scrambleJSONCache.getScrambleStringOrStrings(info);
-    if (typeof scrambleStringOrStrings === "string") {
-      this.classList.remove("show-multi");
-      this.querySelector("twisty-player").alg = scrambleStringOrStrings;
-      this.querySelector("twisty-player").timestamp = "end";
-      multiElem.hidden = true;
+    if (isMatchup) {
+      this.#toggleShowAllSubScrambles(false);
+      this.querySelector("twisty-player").alg = info.scrambleString;
+      this.#setField("matchup", `Matchup: ${info.matchupID}`);
     } else {
-      this.classList.add("show-multi");
-      this.#currentSubScrambleStrings = scrambleStringOrStrings;
-      this.#currentSubScrambleIndex = 0;
-      multiElem.hidden = false;
-      this.querySelector(".multi .total-sub-scramble-num").textContent =
-        `${scrambleStringOrStrings.length}`;
-      this.querySelector("multi-blind-grid-display").setScrambles(
-        scrambleStringOrStrings,
-      );
-      this.#currentSubScrambleSetIndex(0);
-      this.querySelector<HTMLButtonElement>(".multi .all").disabled = false;
+      this.#setField("round", `Round ${info.roundNumber}`);
+      this.#setField("scramble-set", `Scramble Set ${info.scrambleSetNumber}`);
+
+      const multiElem = this.querySelector<HTMLElement>(".multi");
+
+      const scrambleStringOrStrings =
+        await this.sharedState.scrambleJSONCache.getScrambleStringOrStrings(
+          info,
+        );
+      if (typeof scrambleStringOrStrings === "string") {
+        this.classList.remove("show-multi");
+        this.querySelector("twisty-player").alg = scrambleStringOrStrings;
+        this.querySelector("twisty-player").timestamp = "end";
+        multiElem.hidden = true;
+      } else {
+        this.classList.add("show-multi");
+        this.#currentSubScrambleStrings = scrambleStringOrStrings;
+        this.#currentSubScrambleIndex = 0;
+        multiElem.hidden = false;
+        this.querySelector(".multi .total-sub-scramble-num").textContent =
+          `${scrambleStringOrStrings.length}`;
+        this.querySelector("multi-blind-grid-display").setScrambles(
+          scrambleStringOrStrings,
+        );
+        this.#currentSubScrambleSetIndex(0);
+        this.querySelector<HTMLButtonElement>(".multi .all").disabled = false;
+      }
     }
+  }
+
+  matchupACallbackIdentifyingInfo(): MatchupCallbackIdentifyingInfo {
+    const { matchupID, competitorMatchupID, attemptID } = this
+      .#info as MatchupAttemptScrambleInfo;
+    const { scramblerName, displayIndex } = this;
+    return {
+      matchupID,
+      competitorMatchupID,
+      attemptID,
+      scrambler: scramblerName,
+      displayNumber: displayIndex,
+    };
   }
 
   #showingMultiScrambles(): boolean {
@@ -202,15 +248,22 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     }
   }
 
+  #scramblerName: string | undefined;
   async #onSetScrambler() {
     const setScramblerButton = this.querySelector(".set-scrambler");
     setScramblerButton.textContent = "Please identify this scrambler…";
     const name =
-      (await this.sharedState.setScramblerCallback(this.displayIndex)) ??
-      nextUnassigned();
+      (await this.sharedState.callbacks.setScramblerCallback?.(
+        this.displayIndex,
+      )) ?? nextUnassigned();
+    this.#scramblerName = name;
     this.#setField("scrambler-name", name);
     setScramblerButton.textContent =
       setScramblerButton.getAttribute("data-original-text");
+  }
+
+  get scramblerName(): string | undefined {
+    return this.#scramblerName;
   }
 
   markAsSigned() {

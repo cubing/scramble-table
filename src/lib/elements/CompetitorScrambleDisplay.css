@@ -1,6 +1,6 @@
 competitor-scramble-display {
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto 1fr auto auto;
   border: 1px solid;
 }
 
@@ -130,4 +130,11 @@ scramble-table dialog::backdrop {
   background-color: #444;
   opacity: 0.75;
   z-index: 1;
+}
+
+competitor-scramble-display.matchup .scramble-set {
+  display: none;
+}
+competitor-scramble-display:not(.matchup) .matchup {
+  display: none;
 }

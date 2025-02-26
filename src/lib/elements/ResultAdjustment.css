@@ -1,0 +1,53 @@
+result-adjustment {
+  display: grid;
+  border-top: 1px solid;
+
+  color-scheme: light dark;
+}
+
+result-adjustment div.result-input {
+  padding: 1em;
+  box-sizing: border-box;
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  grid-template-columns: auto auto auto 1fr auto auto;
+  gap: 0.5em;
+}
+result-adjustment loading-indicator {
+  width: 1em;
+  height: 1em;
+  border-radius: 1em;
+  border: 0.25em solid rgba(0, 0, 0, 0);
+  opacity: 0.3;
+}
+
+result-adjustment.loading loading-indicator {
+  border-top: 0.25em solid currentColor;
+  border-right: 0.25em solid currentColor;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+result-adjustment timed-result {
+  display: grid;
+  place-content: center;
+}
+
+result-adjustment.loading timed-result {
+  opacity: 0.3;
+}
+
+/* 
+result-adjustment button {
+  font-size: 1.5em;
+} */
