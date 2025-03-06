@@ -7,7 +7,10 @@ import type {
   ScrambleSetJSON,
 } from "./format";
 
-import type { AttemptScrambleInfo } from "../AttemptScrambleInfo";
+import type {
+  AttemptScrambleInfo,
+  WCAAttemptScrambleInfo,
+} from "../AttemptScrambleInfo";
 import { decryptJSON } from "../encryption/passcode-encryption";
 
 import { multiScramblesEncryptedPerAttemptEvents } from "../eventMetadata";
@@ -68,7 +71,7 @@ export class ScrambleJSONCache {
   }
 
   async getScrambleStringOrStrings(
-    info: AttemptScrambleInfo,
+    info: WCAAttemptScrambleInfo,
   ): Promise<string | string[]> {
     if (!this.#json) {
       throw new Error("Tried to get a scramble with missing JSON.");

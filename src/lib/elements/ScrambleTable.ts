@@ -63,7 +63,7 @@ export class ScrambleTable
     this.append(template.content.cloneNode(true));
     const scrambleJSONCache = new ScrambleJSONCache(this); // TODO: place this in a less fragile location.
     const callbacks: ScrambleTableCallbacks = {
-      matchupSetScramblerCallback: DEFAULT_SET_SCRAMBLER_CALLBACK,
+      setScramblerCallback: DEFAULT_SET_SCRAMBLER_CALLBACK,
       ...options?.callbacks,
     };
 

@@ -14,7 +14,9 @@ export async function encryptJSON<T>(
   const encrypter = new Encrypter();
   encrypter.setScryptWorkFactor(SCRYPT_WORK_FACTOR);
   encrypter.setPassphrase(passcode);
-  return arrayBufferToHex(await encrypter.encrypt(JSON.stringify(json)));
+  return arrayBufferToHex(
+    (await encrypter.encrypt(JSON.stringify(json))) as unknown as ArrayBuffer,
+  );
 }
 
 export async function decryptJSON<T>(
