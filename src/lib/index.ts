@@ -10,4 +10,5 @@ export type {
   MatchupName,
   ResultForTimedAttempt,
   ScrambleTableCallbacks,
+  MatchupCallbackIdentifyingInfo,
 } from "./elements/SharedState";
