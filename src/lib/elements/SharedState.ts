@@ -28,6 +28,9 @@ export interface ScrambleTableCallbacks {
     identifyingInfo: MatchupCallbackIdentifyingInfo,
     deltaSeconds: number,
   ) => Promise<ResultForTimedAttemptWithPenalty>;
+  matchupToggleDNF?: (
+    identifyingInfo: MatchupCallbackIdentifyingInfo,
+  ) => Promise<ResultForTimedAttemptWithPenalty>;
   matchupFinishAttemptCallback?: (
     identifyingInfo: MatchupCallbackIdentifyingInfo,
   ) => void;

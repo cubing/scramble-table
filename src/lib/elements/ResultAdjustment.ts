@@ -32,6 +32,7 @@ export class ResultAdjustment extends HTMLElement {
     this.#minusTwoButton.addEventListener("click", () =>
       this.adjustPenalty(-2),
     );
+    this.#dnfButton.addEventListener("click", () => this.toggleDNF());
     this.#finishAttemptButton.addEventListener("click", () =>
       this.finishAttemptPressed(),
     );
@@ -86,6 +87,10 @@ export class ResultAdjustment extends HTMLElement {
     return this.querySelector(".plus-2");
   }
 
+  get #dnfButton(): HTMLButtonElement {
+    return this.querySelector(".DNF");
+  }
+
   // `deltaSeconds` will usually be `2` or `-2`.
   async adjustPenalty(deltaSeconds: number) {
     this.#loading = true;
@@ -95,11 +100,29 @@ export class ResultAdjustment extends HTMLElement {
       this.result = result;
     }
     if (!this.sharedState.callbacks.matchupAdjustPenaltyCallback) {
-      throw new Error("Missing `adjustPenaltyCallback`!");
+      throw new Error("Missing `matchupAdjustPenaltyCallback`!");
     }
     this.result = await this.sharedState.callbacks.matchupAdjustPenaltyCallback(
       this.competitorScrambleDisplay.matchupACallbackIdentifyingInfo(),
       deltaSeconds,
+    );
+    this.#loading = false;
+  }
+
+  async toggleDNF() {
+    this.#loading = true;
+    if (
+      this.#resultForTimedAttemptWithPenalty.resultForTimedAttempt !== "DNF"
+    ) {
+      const { result } = this;
+      result.resultForTimedAttempt = "DNF";
+      this.result = result;
+    }
+    if (!this.sharedState.callbacks.matchupToggleDNF) {
+      throw new Error("Missing `matchupToggleDNF` callback!");
+    }
+    this.result = await this.sharedState.callbacks.matchupToggleDNF(
+      this.competitorScrambleDisplay.matchupACallbackIdentifyingInfo(),
     );
     this.#loading = false;
   }

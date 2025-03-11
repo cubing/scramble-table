@@ -126,6 +126,21 @@ async function matchupAdjustPenaltyCallback(
   return structuredClone(result);
 }
 
+async function matchupToggleDNF(
+  identifyingInfo: MatchupCallbackIdentifyingInfo,
+): Promise<ResultForTimedAttemptWithPenalty> {
+  await simulateLatency();
+  const result = accessResult(identifyingInfo);
+
+  // A real DB should persist the time and restore it here, but we just generate a new one for testing.
+  result.resultForTimedAttempt =
+    result.resultForTimedAttempt === "DNF"
+      ? randomNewResult().resultForTimedAttempt
+      : "DNF";
+
+  return structuredClone(result);
+}
+
 async function matchupFinishAttemptCallback(
   identifyingInfo: MatchupCallbackIdentifyingInfo,
 ): Promise<void> {
@@ -143,6 +158,7 @@ const app = document.body.appendChild(
     callbacks: {
       matchupGetResultCallback,
       matchupAdjustPenaltyCallback,
+      matchupToggleDNF,
       matchupFinishAttemptCallback,
       refreshCurrentMatchupsCallback,
       resetMatchupCallback: async (matchupID) =>
