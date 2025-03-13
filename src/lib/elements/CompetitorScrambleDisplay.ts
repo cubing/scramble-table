@@ -248,6 +248,11 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     }
   }
 
+  async setScramblerName(scramblerName: string) {
+    this.#scramblerName = scramblerName;
+    this.#setField("scrambler-name", scramblerName);
+  }
+
   #scramblerName: string | undefined;
   async #onSetScrambler() {
     const setScramblerButton = this.querySelector(".set-scrambler");
@@ -256,8 +261,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       (await this.sharedState.callbacks.setScramblerCallback?.(
         this.displayIndex,
       )) ?? nextUnassigned();
-    this.#scramblerName = name;
-    this.#setField("scrambler-name", name);
+    this.setScramblerName(name);
     setScramblerButton.textContent =
       setScramblerButton.getAttribute("data-original-text");
   }
