@@ -40,6 +40,7 @@ function matchupSelectedCallback(matchupID: MatchupID) {
         attemptID: "1",
         scrambleString:
           "B2 D F2 D2 B2 L2 B2 U B2 U L2 F2 L' F D' B2 D' L D R' U",
+        score: 0,
       });
       app.displays[0].setScramble({
         competitorName: "Abraham Lincoln",
@@ -49,6 +50,7 @@ function matchupSelectedCallback(matchupID: MatchupID) {
         attemptID: "1",
         scrambleString:
           "B2 D F2 D2 B2 L2 B2 U B2 U L2 F2 L' F D' B2 D' L D R' U",
+        score: 0,
       });
       return;
     }
@@ -61,6 +63,7 @@ function matchupSelectedCallback(matchupID: MatchupID) {
         attemptID: "1",
         scrambleString:
           "D2 F U R' U' D F L U' R' L2 B D2 R2 L2 F D2 F' L2 F R2",
+        score: 1,
       });
       app.displays[0].setScramble({
         competitorName: "Enkidu",
@@ -70,6 +73,7 @@ function matchupSelectedCallback(matchupID: MatchupID) {
         attemptID: "1",
         scrambleString:
           "D2 F U R' U' D F L U' R' L2 B D2 R2 L2 F D2 F' L2 F R2",
+        score: 1,
       });
       return;
     }

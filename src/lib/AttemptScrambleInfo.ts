@@ -16,6 +16,7 @@ export interface MatchupAttemptScrambleInfo extends CommonAttemptScrambleInfo {
   competitorMatchupID: string;
   attemptID: string;
   scrambleString: string;
+  score?: number | string;
 }
 
 export type AttemptScrambleInfo =

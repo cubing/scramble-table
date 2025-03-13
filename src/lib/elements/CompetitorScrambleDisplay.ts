@@ -132,6 +132,8 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   async setScramble(info: AttemptScrambleInfo): Promise<void> {
     const isMatchup = "matchupID" in info;
     this.classList.toggle("matchup", isMatchup);
+    this.classList.toggle("score", isMatchup);
+    this.classList.toggle("round", !isMatchup);
 
     this.classList.remove("scramble-signed");
     this.#toggleShowAllSubScrambles(false);
@@ -151,6 +153,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       this.#toggleShowAllSubScrambles(false);
       this.querySelector("twisty-player").alg = info.scrambleString;
       this.#setField("matchup", `Matchup: ${info.matchupID}`);
+      this.#setField("score", `Score: ${info.score ?? "—"}`);
     } else {
       this.#setField("round", `Round ${info.roundNumber}`);
       this.#setField("scramble-set", `Scramble Set ${info.scrambleSetNumber}`);
