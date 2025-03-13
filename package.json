@@ -1,7 +1,7 @@
 {
   "name": "@cubing/scramble-table",
   "description": "A UI for physical scramble tables at cubing competitions.",
-  "version": "0.2.4",
+  "version": "0.2.5-pre1-head-to-head",
   "type": "module",
   "publishConfig": {
     "access": "public"
