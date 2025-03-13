@@ -67,7 +67,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       () => this.#toggleShowAllSubScrambles(),
     );
     this.querySelector(".clear-scramble")!.addEventListener("click", () =>
-      this.#clearScramble(),
+      this.clearScramble(),
     );
     this.querySelector("multi-blind-grid-display")!.addEventListener(
       "scramble-clicked",
