@@ -109,7 +109,7 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.querySelector<HTMLDialogElement>(".additional-actions").close();
   }
 
-  #clearScramble() {
+  clearScramble() {
     this.classList.remove("scramble-signed");
     this.#toggleShowAllSubScrambles(false);
     this.#setField("competitor", "");
