@@ -139,10 +139,11 @@ export class ResultAdjustment extends HTMLElement {
     this.sharedState.callbacks.matchupFinishAttemptCallback(
       this.competitorScrambleDisplay.matchupACallbackIdentifyingInfo(),
     );
+    this.reset();
   }
 
   reset() {
-    this.#resultForTimedAttemptWithPenalty = undefined;
+    this.result = undefined;
   }
 
   set #loading(loading: boolean) {
