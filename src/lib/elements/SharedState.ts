@@ -33,7 +33,7 @@ export interface ScrambleTableCallbacks {
   ) => Promise<ResultForTimedAttemptWithPenalty>;
   matchupFinishAttemptCallback?: (
     identifyingInfo: MatchupCallbackIdentifyingInfo,
-  ) => void;
+  ) => Promise<void>;
   refreshCurrentMatchupsCallback?: () => Promise<
     Record<MatchupID, MatchupName>
   >;

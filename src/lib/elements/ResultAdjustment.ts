@@ -136,7 +136,7 @@ export class ResultAdjustment extends HTMLElement {
   }
 
   async finishAttemptPressed(): Promise<void> {
-    this.sharedState.callbacks.matchupFinishAttemptCallback(
+    await this.sharedState.callbacks.matchupFinishAttemptCallback(
       this.competitorScrambleDisplay.matchupACallbackIdentifyingInfo(),
     );
     this.reset();
