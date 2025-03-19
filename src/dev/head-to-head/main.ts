@@ -165,8 +165,7 @@ const app = document.body.appendChild(
       matchupToggleDNF,
       matchupFinishAttemptCallback,
       refreshCurrentMatchupsCallback,
-      resetMatchupCallback: async (matchupID) =>
-        console.log("Reset matchup:", { matchupID }),
+      resetCallback: async (matchupID) => console.log("Reset:", { matchupID }),
       matchupSelectedCallback,
     },
     showMatchupsSelection: "show",

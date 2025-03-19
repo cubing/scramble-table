@@ -21,8 +21,8 @@ export class ScrambleTableMatchupSelection extends HTMLElement {
     this.refreshMatchups();
 
     this.#resetCurrentMatchups.addEventListener("click", async () => {
-      const { resetMatchupCallback } = this.sharedState.callbacks;
-      if (resetMatchupCallback) {
+      const { resetCallback } = this.sharedState.callbacks;
+      if (resetCallback) {
         await this.resetCurrentMatchup();
       }
     });
@@ -44,7 +44,7 @@ export class ScrambleTableMatchupSelection extends HTMLElement {
   }
 
   get #resetCurrentMatchups(): HTMLButtonElement {
-    return this.querySelector(".reset-current-matchup");
+    return this.querySelector(".reset");
   }
 
   private async refreshMatchups(): Promise<void> {
@@ -55,9 +55,9 @@ export class ScrambleTableMatchupSelection extends HTMLElement {
   }
 
   private async resetCurrentMatchup(): Promise<void> {
-    const { resetMatchupCallback } = this.sharedState.callbacks;
-    if (resetMatchupCallback) {
-      await resetMatchupCallback(this.#select.value);
+    const { resetCallback } = this.sharedState.callbacks;
+    if (resetCallback) {
+      await resetCallback(this.#select.value);
     }
     // TODO: what should we reset here?
   }

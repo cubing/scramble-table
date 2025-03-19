@@ -37,7 +37,7 @@ export interface ScrambleTableCallbacks {
   refreshCurrentMatchupsCallback?: () => Promise<
     Record<MatchupID, MatchupName>
   >;
-  resetMatchupCallback?: (matchupID: MatchupID) => Promise<void>;
+  resetCallback?: (matchupID: MatchupID) => Promise<void>;
   // Use this to e.g. call `setScramble(…)` on the competitor scramble displays.
   matchupSelectedCallback?: (matchupID: MatchupID) => void;
 }
