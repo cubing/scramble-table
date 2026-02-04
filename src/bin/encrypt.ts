@@ -2,6 +2,7 @@ import { encryptJSON } from "../lib/encryption/passcode-encryption";
 import {
   eventName,
   multiScramblesEncryptedPerAttemptEvents,
+  type SupportedEventID,
 } from "../lib/eventMetadata";
 import type {
   PartialCompetitionScramblesJSON,
@@ -15,20 +16,21 @@ export async function encryptScrambles(
   competitionScramblesJSON: PartialCompetitionScramblesJSON<ScrambleSetJSON>,
   passcodesInputFileText: string,
 ): Promise<PartialCompetitionScramblesJSON<ScrambleSetEncryptedJSON>> {
-  const passcodeTable = [];
+  const passcodeTable: string[] = [];
   for (const line of passcodesInputFileText.split(/\r?\n/g)) {
     const [key, value, ..._] = line.split(": ");
     if (!value) {
       continue;
     }
-    passcodeTable[key] = value;
+    // biome-ignore lint/suspicious/noExplicitAny: TODO: better type for a sparse array?
+    passcodeTable[key as any] = value;
   }
 
   function passcodeForScrambleSetOrAttempt(
-    eventID: string,
+    eventID: SupportedEventID,
     roundNumber: number,
     scrambleSetNumber: number,
-    onlyScrambleSetForRound: boolean,
+    _onlyScrambleSetForRound: boolean, // TODO
     attemptID?: string, // Required for `multiScramblesEncryptedPerAttemptEvents` events.
   ): string {
     let key = eventName(eventID);
@@ -40,7 +42,8 @@ export async function encryptScrambles(
       }
       key += ` Attempt ${attemptID}`;
     }
-    const passcode = passcodeTable[key];
+    // biome-ignore lint/suspicious/noExplicitAny: TODO: better type for a sparse array?
+    const passcode = passcodeTable[key as any];
     if (!passcode) {
       throw new Error(`Could not find passcode for key: ${key}`);
     }

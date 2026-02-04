@@ -1,14 +1,15 @@
 import { addCSS } from "./elements/html";
-// @ts-ignore
+// @ts-expect-error
 import mainCSS from "./elements/main.css";
+
 addCSS(mainCSS);
 
 export { CompetitorScrambleDisplay } from "./elements/CompetitorScrambleDisplay";
 export { ScrambleTable } from "./elements/ScrambleTable";
 export type {
+  MatchupCallbackIdentifyingInfo,
   MatchupID,
   MatchupName,
   ResultForTimedAttempt,
   ScrambleTableCallbacks,
-  MatchupCallbackIdentifyingInfo,
 } from "./elements/SharedState";

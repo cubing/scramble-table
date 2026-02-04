@@ -1,15 +1,11 @@
-import type { ExperimentalMillisecondTimestamp } from "cubing/twisty";
 import { ScrambleTable } from "../../lib";
 import type { AttemptScrambleInfo } from "../../lib/AttemptScrambleInfo";
 import type {
   MatchupCallbackIdentifyingInfo,
   MatchupID,
-  ResultForTimedAttempt,
 } from "../../lib/elements/SharedState";
-import {
-  type ResultForTimedAttemptWithPenalty,
-  formatResultForTimedAttempt,
-} from "../../lib/vendor/timer.cubing.net/stats";
+import { customEventWorkaround } from "../../lib/mustExist";
+import type { ResultForTimedAttemptWithPenalty } from "../../lib/vendor/timer.cubing.net/stats";
 
 declare global {
   interface globalThis {
@@ -80,10 +76,7 @@ function matchupSelectedCallback(matchupID: MatchupID) {
   }
 }
 
-const localResultDB: Record<
-  number /* display number */,
-  ResultForTimedAttemptWithPenalty
-> = {};
+const localResultDB: Record<string, ResultForTimedAttemptWithPenalty> = {};
 
 function randomNewResult(): ResultForTimedAttemptWithPenalty {
   if (Math.random() < 0.05) {
@@ -171,12 +164,15 @@ const app = document.body.appendChild(
     showMatchupsSelection: "show",
   }),
 );
-globalThis.app = app;
+// biome-ignore lint/suspicious/noExplicitAny: Augmentation.
+(globalThis as any).app = app;
 
 app.addEventListener(
   "scramble-cleared",
-  (e: CustomEvent<{ displayIndex: number }>) => {
-    console.log(`Scramble cleared for display index: ${e.detail.displayIndex}`);
+  (e: CustomEventInit<{ displayIndex: number }>) => {
+    console.log(
+      `Scramble cleared for display index: ${customEventWorkaround(e).detail.displayIndex}`,
+    );
   },
 );
 

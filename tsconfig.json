@@ -1,14 +1,7 @@
 {
+  "extends": "./node_modules/@cubing/dev-config/ts/es2022-types/tsconfig.json",
   "compilerOptions": {
-    "target": "es2020",
-    "module": "es2020",
-    "moduleResolution": "bundler",
-    "verbatimModuleSyntax": true, // avoids surprises with `cubing/twisty`
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "dist/lib",
-    "resolveJsonModule": true,
-    "skipLibCheck": true // grrrrrrr https://github.com/oven-sh/bun/issues/8761
+    "noEmit": true
   },
-  "include": ["src"]
+  "exclude": ["./dist/"]
 }

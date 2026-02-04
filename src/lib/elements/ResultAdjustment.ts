@@ -1,15 +1,12 @@
-import type { ExperimentalMillisecondTimestamp } from "cubing/twisty";
-import { addCSS, parseHTML } from "./html";
-
+import { mustExist } from "../mustExist";
 import {
-  type ResultForTimedAttemptWithPenalty,
-  formatResultForTimedAttempt,
   formatResultForTimedAttemptWithPenalty,
+  type ResultForTimedAttemptWithPenalty,
 } from "../vendor/timer.cubing.net/stats";
 import type { CompetitorScrambleDisplay } from "./CompetitorScrambleDisplay";
-// @ts-ignore
+import { addCSS, parseHTML } from "./html";
+// @ts-expect-error
 import css from "./ResultAdjustment.css";
-// @ts-ignore
 import templateHTML from "./ResultAdjustment.template.html";
 import type { SharedState } from "./SharedState";
 
@@ -60,12 +57,12 @@ export class ResultAdjustment extends HTMLElement {
         )
       : "—.——";
     this.#minusTwoButton.disabled =
-      this.#resultForTimedAttemptWithPenalty &&
+      !!this.#resultForTimedAttemptWithPenalty &&
       this.#resultForTimedAttemptWithPenalty.penaltySeconds === 0;
   }
 
   get #getResultElem(): HTMLButtonElement {
-    return this.querySelector(".get-result");
+    return mustExist(this.querySelector(".get-result"));
   }
 
   async #getResultPressed() {
@@ -80,22 +77,22 @@ export class ResultAdjustment extends HTMLElement {
   }
 
   get #timedResultElem(): HTMLButtonElement {
-    return this.querySelector("timed-result");
+    return mustExist(this.querySelector("timed-result"));
   }
 
   get #plusTwoButton(): HTMLButtonElement {
-    return this.querySelector(".plus-2");
+    return mustExist(this.querySelector(".plus-2"));
   }
 
   get #dnfButton(): HTMLButtonElement {
-    return this.querySelector(".DNF");
+    return mustExist(this.querySelector(".DNF"));
   }
 
   // `deltaSeconds` will usually be `2` or `-2`.
   async adjustPenalty(deltaSeconds: number) {
     this.#loading = true;
     if (this.#resultForTimedAttemptWithPenalty) {
-      const { result } = this;
+      const result = mustExist(this.result);
       result.penaltySeconds += deltaSeconds;
       this.result = result;
     }
@@ -112,9 +109,9 @@ export class ResultAdjustment extends HTMLElement {
   async toggleDNF() {
     this.#loading = true;
     if (
-      this.#resultForTimedAttemptWithPenalty.resultForTimedAttempt !== "DNF"
+      this.#resultForTimedAttemptWithPenalty?.resultForTimedAttempt !== "DNF"
     ) {
-      const { result } = this;
+      const result = mustExist(this.result);
       result.resultForTimedAttempt = "DNF";
       this.result = result;
     }
@@ -128,15 +125,16 @@ export class ResultAdjustment extends HTMLElement {
   }
 
   get #minusTwoButton(): HTMLButtonElement {
-    return this.querySelector(".minus-2");
+    return mustExist(this.querySelector(".minus-2"));
   }
 
   get #finishAttemptButton(): HTMLButtonElement {
-    return this.querySelector(".finish-attempt");
+    return mustExist(this.querySelector(".finish-attempt"));
   }
 
   async finishAttemptPressed(): Promise<void> {
-    await this.sharedState.callbacks.matchupFinishAttemptCallback(
+    // TODO: `?.`?
+    await mustExist(this.sharedState.callbacks.matchupFinishAttemptCallback)(
       this.competitorScrambleDisplay.matchupACallbackIdentifyingInfo(),
     );
     this.reset();

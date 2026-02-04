@@ -1,4 +1,5 @@
 import { ScrambleTable } from "../lib";
+import { customEventWorkaround } from "../lib/mustExist";
 
 declare global {
   interface globalThis {
@@ -7,12 +8,15 @@ declare global {
 }
 
 const app = document.body.appendChild(new ScrambleTable());
-globalThis.app = app;
+// biome-ignore lint/suspicious/noExplicitAny: Augmentation
+(globalThis as any).app = app;
 
 app.addEventListener(
   "scramble-cleared",
-  (e: CustomEvent<{ displayIndex: number }>) => {
-    console.log(`Scramble cleared for display index: ${e.detail.displayIndex}`);
+  (e: CustomEventInit<{ displayIndex: number }>) => {
+    console.log(
+      `Scramble cleared for display index: ${customEventWorkaround(e).detail.displayIndex}`,
+    );
   },
 );
 

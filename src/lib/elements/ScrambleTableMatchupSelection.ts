@@ -1,8 +1,8 @@
+import { mustExist } from "../mustExist";
 import { addCSS, parseHTML } from "./html";
 
-// @ts-ignore
+// @ts-expect-error
 import css from "./ScrambleTableMatchupSelection.css";
-// @ts-ignore
 import templateHTML from "./ScrambleTableMatchupSelection.template.html";
 import type { MatchupID, MatchupName, SharedState } from "./SharedState";
 
@@ -16,9 +16,9 @@ export class ScrambleTableMatchupSelection extends HTMLElement {
     this.append(template.content.cloneNode(true));
 
     this.#refreshMatchups.addEventListener("click", async () => {
-      this.refreshMatchups();
+      void this.refreshMatchups();
     });
-    this.refreshMatchups();
+    void this.refreshMatchups();
 
     this.#resetCurrentMatchups.addEventListener("click", async () => {
       const { resetCallback } = this.sharedState.callbacks;
@@ -36,15 +36,15 @@ export class ScrambleTableMatchupSelection extends HTMLElement {
   }
 
   get #select(): HTMLSelectElement {
-    return this.querySelector("select");
+    return mustExist(this.querySelector("select"));
   }
 
   get #refreshMatchups(): HTMLButtonElement {
-    return this.querySelector(".refresh-matchups");
+    return mustExist(this.querySelector(".refresh-matchups"));
   }
 
   get #resetCurrentMatchups(): HTMLButtonElement {
-    return this.querySelector(".reset");
+    return mustExist(this.querySelector(".reset"));
   }
 
   private async refreshMatchups(): Promise<void> {

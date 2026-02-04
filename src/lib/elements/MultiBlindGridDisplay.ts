@@ -1,14 +1,13 @@
 import type { Alg } from "cubing/alg";
 import { TwistyPlayer } from "cubing/twisty";
-
-// @ts-ignore
-import css from "./MultiBlindGridDisplay.css";
 import { addCSS } from "./html";
+// @ts-expect-error
+import css from "./MultiBlindGridDisplay.css";
 
 addCSS(css);
 
 class MultiBlindGridDisplay extends HTMLElement {
-  #subScrambles: (Alg | string)[] = [];
+  // #subScrambles: (Alg | string)[] = []; // TODO
   #subScrambleElems: TwistyPlayer[] = [];
   #highlightedSubScrambleElem: TwistyPlayer | undefined;
 
@@ -18,9 +17,10 @@ class MultiBlindGridDisplay extends HTMLElement {
     this.appendChild(this.#wrapper).classList.add("wrapper");
   }
 
-  #columnCSS: HTMLStyleElement;
+  // #columnCSS: HTMLStyleElement;
   connectedCallback() {
-    this.#columnCSS = this.appendChild(document.createElement("style"));
+    // this.#columnCSS = this.appendChild(document.createElement("style"));
+    this.appendChild(document.createElement("style"));
     this.setNumColumnsAndRows(1, 1);
   }
 
@@ -31,7 +31,7 @@ class MultiBlindGridDisplay extends HTMLElement {
   }
 
   setScrambles(scrambles: (Alg | string)[]): void {
-    this.#subScrambles = scrambles;
+    // this.#subScrambles = scrambles;
     while (this.#subScrambleElems.length > scrambles.length) {
       this.#subScrambleElems.splice(-1)[0].remove();
     }

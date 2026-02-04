@@ -1,3 +1,7 @@
+import type { WCAAttemptScrambleInfo } from "../AttemptScrambleInfo";
+import { decryptJSON } from "../encryption/passcode-encryption";
+import { multiScramblesEncryptedPerAttemptEvents } from "../eventMetadata";
+import { mustExist } from "../mustExist";
 import type {
   PartialCompetitionScramblesEventJSON,
   PartialCompetitionScramblesJSON,
@@ -6,14 +10,6 @@ import type {
   ScrambleSetEncryptedPerAttemptJSON,
   ScrambleSetJSON,
 } from "./format";
-
-import type {
-  AttemptScrambleInfo,
-  WCAAttemptScrambleInfo,
-} from "../AttemptScrambleInfo";
-import { decryptJSON } from "../encryption/passcode-encryption";
-
-import { multiScramblesEncryptedPerAttemptEvents } from "../eventMetadata";
 
 const LOCAL_STORAGE_KEY = "encrypted-scrambles-json";
 
@@ -38,7 +34,7 @@ export class ScrambleJSONCache {
   }
 
   #onJSONHasBeenSet() {
-    this.delegate.setCompetitionName(this.#json.competitionName);
+    this.delegate.setCompetitionName(mustExist(this.#json).competitionName);
   }
 
   setEncryptedScrambleJSON(
@@ -62,7 +58,7 @@ export class ScrambleJSONCache {
     eventID: string,
   ): PartialCompetitionScramblesEventJSON<ScrambleSetEncryptedJSON> {
     // TODO: cache this lookup.
-    for (const event of this.#json.wcif.events) {
+    for (const event of mustExist(this.#json).wcif.events) {
       if (event.id === eventID) {
         return event;
       }
@@ -87,18 +83,18 @@ export class ScrambleJSONCache {
       if (info.attemptID.startsWith("E")) {
         ciphertext =
           scrambleSetEncryptedJSON.encryptedExtraScrambles[
-            Number.parseInt(info.attemptID.slice(1)) - 1
+            parseInt(info.attemptID.slice(1), 10) - 1
           ];
       } else {
         ciphertext =
           scrambleSetEncryptedJSON.encryptedScrambles[
-            Number.parseInt(info.attemptID) - 1
+            parseInt(info.attemptID, 10) - 1
           ];
       }
       const scrambleStrings: string[] = (
         (await decryptJSON(ciphertext, info.passcode)) as string
       ).split("\n");
-      if (scrambleStrings.length < info.numSubScrambles) {
+      if (scrambleStrings.length < mustExist(info.numSubScrambles)) {
         throw new Error("Not enough sub-scrambles available!");
       }
       if (!("numSubScrambles" in info)) {
@@ -116,9 +112,9 @@ export class ScrambleJSONCache {
     );
     if (info.attemptID.startsWith("E")) {
       return scrambleSetJSON.extraScrambles[
-        Number.parseInt(info.attemptID.slice(1)) - 1
+        parseInt(info.attemptID.slice(1), 10) - 1
       ];
     }
-    return scrambleSetJSON.scrambles[Number.parseInt(info.attemptID) - 1];
+    return scrambleSetJSON.scrambles[parseInt(info.attemptID, 10) - 1];
   }
 }

@@ -1,43 +1,48 @@
-
 .PHONY: build
-build: build-package build-types
+build: build-js build-types
+
+.PHONY: check
+check: lint build check-package.json
+
+.PHONY: check-package.json
+check-package.json: build
+	bun x -- bun-dx --package @cubing/dev-config package.json -- check
 
 .PHONY: setup
 setup:
 	@command -v bun > /dev/null || { echo "\nPlease install \`bun\` to work on this project:\n\n    # from npm\n    npm install --global bun\n\n    # macOS (Homebrew)\n    brew install oven-sh/bun/bun\n\n    # For other options, see: https://bun.sh/\n" && exit 1 ; }
-	bun install --no-save
+	bun install --frozen-lockfile
 
-.PHONY: build-package
-build-package: setup
-	bun run script/build-package.ts
+.PHONY: build-js
+build-js: setup
+	bun run -- ./script/build-js.ts
 
 .PHONY: build-types
 build-types: setup
-	npx tsc
+	bun x -- bun-dx --package typescript tsc -- --project ./tsconfig.types.json
 
 .PHONY: dev
 dev: setup
-	bun run script/dev.ts
+	bun run -- ./script/dev.ts
+
+RM_RF = bun -e 'process.argv.slice(1).map(p => process.getBuiltinModule("node:fs").rmSync(p, {recursive: true, force: true, maxRetries: 5}))' --
 
 .PHONY: clean
 clean:
-	rm -rf ./dist
+	${RM_RF} ./dist/
 
 .PHONY: reset
 reset: clean
-	rm -rf ./node_modules
-
-.PHONY: upgrade-cubing
-upgrade-cubing:
-	bun add cubing@latest
+	${RM_RF} ./node_modules/
 
 .PHONY: lint
 lint: setup
-	npx @biomejs/biome check ./script ./src/bin ./src/lib
+	bun x -- bun-dx --package @biomejs/biome biome -- check
+	bun x -- bun-dx --package typescript tsc -- --project ./tsconfig.json
 
 .PHONY: format
 format: setup
-	npx @biomejs/biome format --write ./script ./src/bin ./src/lib
+	bun x -- bun-dx --package @biomejs/biome biome -- check
 
 .PHONY: encrypt-fake-competition
 encrypt-fake-competition: setup

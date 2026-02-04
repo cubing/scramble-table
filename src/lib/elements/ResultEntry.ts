@@ -1,8 +1,6 @@
 // import { addCSS, parseHTML } from "./html";
 
-// // @ts-ignore
 // import css from "./ResultEntry.css";
-// // @ts-ignore
 // import templateHTML from "./ResultEntry.template.html";
 // import type { ResultForTimedAttempt, SharedState } from "./SharedState";
 

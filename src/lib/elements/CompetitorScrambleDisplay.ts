@@ -1,24 +1,21 @@
 import { eventInfo } from "cubing/puzzles";
 import "cubing/twisty";
 
+import { Alg } from "cubing/alg";
 import type {
   AttemptScrambleInfo,
   MatchupAttemptScrambleInfo,
 } from "../AttemptScrambleInfo";
-
-// @ts-ignore
+// @ts-expect-error
 import css from "./CompetitorScrambleDisplay.css";
-// @ts-ignore
 import templateHTML from "./CompetitorScrambleDisplay.template.html";
-
+import { addCSS, parseHTML } from "./html";
 import type {
   MatchupCallbackIdentifyingInfo,
   SharedState,
 } from "./SharedState";
-import { addCSS, parseHTML } from "./html";
-
-import { Alg } from "cubing/alg";
 import "./MultiBlindGridDisplay";
+import { mustExist } from "../mustExist";
 import { ResultAdjustment } from "./ResultAdjustment";
 
 const template = parseHTML<HTMLTemplateElement>(templateHTML);
@@ -49,30 +46,31 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   connectedCallback() {
     this.append(template.content.cloneNode(true));
     this.#setField("scrambler-name", nextUnassigned());
-    this.querySelector(".set-scrambler")!.addEventListener("click", () =>
-      this.#onSetScrambler(),
+    mustExist(this.querySelector(".set-scrambler")).addEventListener(
+      "click",
+      () => this.#onSetScrambler(),
     );
     this.querySelector("twisty-alg-viewer")!.twistyPlayer =
       this.querySelector("twisty-player");
-    this.querySelector<HTMLButtonElement>(".multi .previous")!.addEventListener(
+    mustExist(
+      this.querySelector<HTMLButtonElement>(".multi .previous"),
+    ).addEventListener("click", () => this.#currentSubScrambleDelta(-1));
+    mustExist(
+      this.querySelector<HTMLButtonElement>(".multi .next"),
+    ).addEventListener("click", () => this.#currentSubScrambleDelta(1));
+    mustExist(
+      this.querySelector<HTMLButtonElement>(".multi .all"),
+    ).addEventListener("click", () => this.#toggleShowAllSubScrambles());
+    mustExist(this.querySelector(".clear-scramble")).addEventListener(
       "click",
-      () => this.#currentSubScrambleDelta(-1),
+      () => this.clearScramble(),
     );
-    this.querySelector<HTMLButtonElement>(".multi .next")!.addEventListener(
-      "click",
-      () => this.#currentSubScrambleDelta(1),
-    );
-    this.querySelector<HTMLButtonElement>(".multi .all")!.addEventListener(
-      "click",
-      () => this.#toggleShowAllSubScrambles(),
-    );
-    this.querySelector(".clear-scramble")!.addEventListener("click", () =>
-      this.clearScramble(),
-    );
-    this.querySelector("multi-blind-grid-display")!.addEventListener(
+
+    mustExist(this.querySelector("multi-blind-grid-display")).addEventListener(
       "scramble-clicked",
-      (e: CustomEvent<{ idx: number }>) => {
-        this.#currentSubScrambleSetIndex(e.detail.idx);
+      // Workaround for https://github.com/microsoft/TypeScript/issues/28357
+      (e: CustomEventInit<{ idx: number }>) => {
+        this.#currentSubScrambleSetIndex(e.detail!.idx);
       },
     );
     this.#initializeAdditionalActions();
@@ -86,27 +84,29 @@ export class CompetitorScrambleDisplay extends HTMLElement {
 
   // TODO: unify dialog code with main settings
   #initializeAdditionalActions() {
-    this.querySelector(".additional-actions-button").addEventListener(
-      "click",
-      () => {
-        this.#showAdditionalActions();
-      },
-    );
+    mustExist(
+      this.querySelector(".additional-actions-button"),
+    ).addEventListener("click", () => {
+      this.#showAdditionalActions();
+    });
 
-    this.querySelector(".additional-actions button.close").addEventListener(
-      "click",
-      () => {
-        this.#hideAdditionalActions();
-      },
-    );
+    mustExist(
+      this.querySelector(".additional-actions button.close"),
+    ).addEventListener("click", () => {
+      this.#hideAdditionalActions();
+    });
   }
 
   #showAdditionalActions() {
-    this.querySelector<HTMLDialogElement>(".additional-actions").showModal();
+    mustExist(
+      this.querySelector<HTMLDialogElement>(".additional-actions"),
+    ).showModal();
   }
 
   #hideAdditionalActions() {
-    this.querySelector<HTMLDialogElement>(".additional-actions").close();
+    mustExist(
+      this.querySelector<HTMLDialogElement>(".additional-actions"),
+    ).close();
   }
 
   clearScramble() {
@@ -117,12 +117,18 @@ export class CompetitorScrambleDisplay extends HTMLElement {
     this.#setField("round", "");
     this.#setField("scramble-set", "");
     this.#setField("attempt", "");
-    this.querySelector("twisty-player").alg = new Alg();
-    this.querySelector("multi-blind-grid-display").setScrambles([]);
-    this.querySelector(".multi .current-sub-scramble-num").textContent = "—";
-    this.querySelector(".multi .total-sub-scramble-num").textContent = "—";
-    this.querySelector<HTMLButtonElement>(".multi .next").disabled = true;
-    this.querySelector<HTMLButtonElement>(".multi .all").disabled = true;
+    mustExist(this.querySelector("twisty-player")).alg = new Alg();
+    mustExist(this.querySelector("multi-blind-grid-display")).setScrambles([]);
+    mustExist(
+      this.querySelector(".multi .current-sub-scramble-num"),
+    ).textContent = "—";
+    mustExist(
+      this.querySelector(".multi .total-sub-scramble-num"),
+    ).textContent = "—";
+    mustExist(this.querySelector<HTMLButtonElement>(".multi .next")).disabled =
+      true;
+    mustExist(this.querySelector<HTMLButtonElement>(".multi .all")).disabled =
+      true;
     this.#hideAdditionalActions();
     this.onScrambleCleared();
     this.#resultAdjustment?.reset();
@@ -144,21 +150,23 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       competitorField = `${competitorField} (ID ${info.competitorCompetitionID})`;
     }
     this.#setField("competitor", competitorField);
-    const eventInfoData = eventInfo(info.eventID);
+    const eventInfoData = mustExist(eventInfo(info.eventID));
 
     this.#setField("event", eventInfoData.eventName);
     this.#setField("attempt", `Attempt ${info.attemptID}`);
-    this.querySelector("twisty-player").puzzle = eventInfoData.puzzleID;
+
+    const twistyPlayer = mustExist(this.querySelector("twisty-player"));
+    twistyPlayer.puzzle = eventInfoData.puzzleID;
     if (isMatchup) {
       this.#toggleShowAllSubScrambles(false);
-      this.querySelector("twisty-player").alg = info.scrambleString;
+      twistyPlayer.alg = info.scrambleString;
       this.#setField("matchup", `Matchup: ${info.matchupID}`);
       this.#setField("score", `Score: ${info.score ?? "—"}`);
     } else {
       this.#setField("round", `Round ${info.roundNumber}`);
       this.#setField("scramble-set", `Scramble Set ${info.scrambleSetNumber}`);
 
-      const multiElem = this.querySelector<HTMLElement>(".multi");
+      const multiElem = mustExist(this.querySelector<HTMLElement>(".multi"));
 
       const scrambleStringOrStrings =
         await this.sharedState.scrambleJSONCache.getScrambleStringOrStrings(
@@ -166,21 +174,24 @@ export class CompetitorScrambleDisplay extends HTMLElement {
         );
       if (typeof scrambleStringOrStrings === "string") {
         this.classList.remove("show-multi");
-        this.querySelector("twisty-player").alg = scrambleStringOrStrings;
-        this.querySelector("twisty-player").timestamp = "end";
+        twistyPlayer.alg = scrambleStringOrStrings;
+        twistyPlayer.timestamp = "end";
         multiElem.hidden = true;
       } else {
         this.classList.add("show-multi");
         this.#currentSubScrambleStrings = scrambleStringOrStrings;
         this.#currentSubScrambleIndex = 0;
         multiElem.hidden = false;
-        this.querySelector(".multi .total-sub-scramble-num").textContent =
-          `${scrambleStringOrStrings.length}`;
-        this.querySelector("multi-blind-grid-display").setScrambles(
+        mustExist(
+          this.querySelector(".multi .total-sub-scramble-num"),
+        ).textContent = `${scrambleStringOrStrings.length}`;
+        mustExist(this.querySelector("multi-blind-grid-display")).setScrambles(
           scrambleStringOrStrings,
         );
         this.#currentSubScrambleSetIndex(0);
-        this.querySelector<HTMLButtonElement>(".multi .all").disabled = false;
+        mustExist(
+          this.querySelector<HTMLButtonElement>(".multi .all"),
+        ).disabled = false;
       }
     }
   }
@@ -203,18 +214,18 @@ export class CompetitorScrambleDisplay extends HTMLElement {
   }
 
   #showingAllSubScrambles(): boolean {
-    return !this.querySelector("multi-blind-grid-display").hidden;
+    return !mustExist(this.querySelector("multi-blind-grid-display")).hidden;
   }
 
   #toggleShowAllSubScrambles(forceShow?: boolean) {
     if (typeof forceShow === "undefined") {
-      // biome-ignore lint/style/noParameterAssign: 🤷
       forceShow = !this.#showingAllSubScrambles();
     }
 
-    this.querySelector("twisty-player").hidden = forceShow;
+    mustExist(this.querySelector("twisty-player")).hidden = forceShow;
     this.classList.toggle("show-multi-grid", forceShow);
-    this.querySelector("multi-blind-grid-display").hidden = !forceShow;
+    mustExist(this.querySelector("multi-blind-grid-display")).hidden =
+      !forceShow;
   }
 
   #currentSubScrambleIndex = 0;
@@ -228,17 +239,20 @@ export class CompetitorScrambleDisplay extends HTMLElement {
       this.#currentSubScrambleIndex,
       this.#currentSubScrambleStrings.length - 1,
     );
-    this.querySelector("twisty-player").alg =
+    mustExist(this.querySelector("twisty-player")).alg =
       this.#currentSubScrambleStrings[this.#currentSubScrambleIndex];
-    this.querySelector("twisty-player").timestamp = "end";
-    this.querySelector(".multi .current-sub-scramble-num").textContent = `${
-      this.#currentSubScrambleIndex + 1
-    }`;
-    this.querySelector<HTMLButtonElement>(".multi .previous").disabled =
-      idx === 0;
-    this.querySelector<HTMLButtonElement>(".multi .next").disabled =
+    mustExist(this.querySelector("twisty-player")).timestamp = "end";
+    mustExist(
+      this.querySelector(".multi .current-sub-scramble-num"),
+    ).textContent = `${this.#currentSubScrambleIndex + 1}`;
+    mustExist(
+      this.querySelector<HTMLButtonElement>(".multi .previous"),
+    ).disabled = idx === 0;
+    mustExist(this.querySelector<HTMLButtonElement>(".multi .next")).disabled =
       idx === this.#currentSubScrambleStrings.length - 1;
-    this.querySelector("multi-blind-grid-display").setHighlightIndex(idx);
+    mustExist(this.querySelector("multi-blind-grid-display")).setHighlightIndex(
+      idx,
+    );
   }
 
   #currentSubScrambleDelta(delta: number) {
@@ -258,13 +272,13 @@ export class CompetitorScrambleDisplay extends HTMLElement {
 
   #scramblerName: string | undefined;
   async #onSetScrambler() {
-    const setScramblerButton = this.querySelector(".set-scrambler");
+    const setScramblerButton = mustExist(this.querySelector(".set-scrambler"));
     setScramblerButton.textContent = "Please identify this scrambler…";
     const name =
       (await this.sharedState.callbacks.setScramblerCallback?.(
         this.displayIndex,
       )) ?? nextUnassigned();
-    this.setScramblerName(name);
+    void this.setScramblerName(name);
     setScramblerButton.textContent =
       setScramblerButton.getAttribute("data-original-text");
   }

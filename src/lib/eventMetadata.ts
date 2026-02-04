@@ -1,4 +1,5 @@
 import { eventInfo } from "cubing/puzzles";
+import { mustExist } from "./mustExist";
 
 // From: https://github.com/thewca/tnoodle/blob/2d9ef27d95eec86367a592210ebc6e45558516aa/tnoodle-ui/src/test/mock/tnoodle.api.test.mock.ts#L14
 export const tnoodleEventNameMappings = {
@@ -21,13 +22,20 @@ export const tnoodleEventNameMappings = {
   "333mbf": "3x3x3 Multiple Blindfolded",
 } as const;
 
-export function eventName(eventID: string): string {
-  return tnoodleEventNameMappings[eventID] ?? eventInfo(eventID).eventName;
+export type TNoodleEventID = keyof typeof tnoodleEventNameMappings;
+export type SupportedEventID = keyof typeof tnoodleEventNameMappings | "fto";
+
+export function eventName(eventID: SupportedEventID): string {
+  return (
+    (tnoodleEventNameMappings as Partial<Record<SupportedEventID, string>>)[
+      eventID
+    ] ?? mustExist(eventInfo(eventID)).eventName
+  );
 }
 
 // TODO: distinguish between multi-scrambles and per-attempt encypted scrambles.
 export const multiScramblesEncryptedPerAttemptEvents: Partial<
-  Record<keyof typeof tnoodleEventNameMappings, boolean>
+  Record<SupportedEventID, boolean>
 > = {
   "333fm": true,
   "333mbf": true,

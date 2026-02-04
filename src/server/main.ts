@@ -2,7 +2,7 @@ import { serve as bunServe } from "bun";
 
 export function serve() {
   bunServe({
-    fetch(req) {
+    fetch(_req) {
       return new Response("Bun!");
     },
   });

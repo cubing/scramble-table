@@ -1,11 +1,12 @@
 import { randomScrambleForEvent } from "cubing/scramble";
-import { randomChoice, randomUIntBelow } from "random-uint-below";
+import { randomChoice } from "random-uint-below";
 import { encryptScrambles } from "../../bin/encrypt";
 import type {
   PartialCompetitionScramblesJSON,
   PartialCompetitionScramblesRoundJSON,
   ScrambleSetJSON,
 } from "../../lib/json/format";
+import { mustExist } from "../../lib/mustExist";
 
 let scrambleJSON: PartialCompetitionScramblesJSON<ScrambleSetJSON> | undefined;
 let passcodesFile: string | undefined;
@@ -36,10 +37,11 @@ async function addFTO(
   const scrambleJSON = structuredClone(scrambleJSONIn);
   let passcodesFile = passcodesFileIn;
   const rounds: PartialCompetitionScramblesRoundJSON<ScrambleSetJSON>[] = [];
-  let scrambleSetID = scrambleJSON.wcif.events
-    .at(-1)
-    .rounds.at(-1)
-    .scrambleSets.at(-1).id;
+  let scrambleSetID = mustExist(
+    mustExist(
+      mustExist(scrambleJSON.wcif.events.at(-1)).rounds.at(-1),
+    ).scrambleSets.at(-1),
+  ).id;
   for (const roundNumber of [1, 2]) {
     const scrambleSets: ScrambleSetJSON[] = [];
     for (const scrambleSetNumber of ["A", "B", "C", "D"]) {
@@ -73,7 +75,7 @@ async function addFTO(
   const event = {
     id: "fto",
     rounds,
-  };
+  } as const;
   scrambleJSON.wcif.events.push(event);
 
   download(
@@ -96,7 +98,7 @@ function download(filename: string, text: string) {
 
 downloadButton.addEventListener("click", async () => {
   const [modifiedScrambleJSON, modifiedPasscodesFile] = addFTOButton.checked
-    ? await addFTO(scrambleJSON, passcodesFile)
+    ? await addFTO(mustExist(scrambleJSON), mustExist(passcodesFile))
     : [scrambleJSON, passcodesFile];
   console.log(modifiedScrambleJSON);
   console.log(modifiedPasscodesFile);

@@ -1,16 +1,12 @@
+import { es2022Lib } from "@cubing/dev-config/esbuild/es2022";
 import { build } from "esbuild";
 import { esbuildOptions } from "./esbuildOptions";
 
 await build({
+  ...es2022Lib(),
   entryPoints: ["src/bin/main.ts", "src/lib/index.ts"],
   ...esbuildOptions,
-  bundle: true,
-  target: "es2020",
-  splitting: true,
-  format: "esm",
-  outdir: "dist/",
-  chunkNames: "chunks/[name]-[hash]",
-  sourcemap: true,
+  outdir: "./dist/",
   external: [
     "array-buffer-to-hex",
     "cubing",

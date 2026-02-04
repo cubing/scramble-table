@@ -1,5 +1,7 @@
 // Unencrypted
 
+import type { SupportedEventID } from "../eventMetadata";
+
 type EncryptedJSON = string;
 
 export interface ScrambleSetJSON {
@@ -29,7 +31,7 @@ export interface PartialCompetitionScramblesRoundJSON<T> {
 }
 
 export interface PartialCompetitionScramblesEventJSON<T> {
-  id: string;
+  id: SupportedEventID;
   rounds: PartialCompetitionScramblesRoundJSON<T>[];
 }
 
