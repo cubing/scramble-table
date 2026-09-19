@@ -21,22 +21,22 @@ app.addEventListener(
 );
 
 app.displays[0].setScramble({
-  competitorName: "Minh Thai",
+  competitorName: "Amelia Multicube",
   competitorCompetitionID: 11,
-  eventID: "333",
-  roundNumber: 1,
+  eventID: "333mbf",
+  roundNumber: 3,
   scrambleSetNumber: 1,
   attemptID: "2",
-  passcode: "tszgw3r9",
-  // numSubScrambles: 23,
+  passcode: "uce4zdvm",
+  numSubScrambles: 23,
 });
 
 app.displays[1].setScramble({
-  competitorName: "Abraham Lincoln",
+  competitorName: "Ben Streeter",
   competitorCompetitionID: 34,
-  eventID: "333",
+  eventID: "fto",
   roundNumber: 1,
   scrambleSetNumber: 1,
-  attemptID: "2",
-  passcode: "tszgw3r9",
+  attemptID: "3",
+  passcode: "7dig4j6y",
 });
