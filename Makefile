@@ -46,7 +46,7 @@ format: setup
 
 .PHONY: encrypt-fake-competition
 encrypt-fake-competition: setup
-	bun run src/bin/main.ts \
+	bun run -- ./src/bin/main.ts \
 		encrypt \
 		"./src/dev/fake-competition/Fake Test Competition.json" \
 		"./src/dev/fake-competition/Fake Test Competition - Computer Display PDF Passcodes - SECRET.txt" \
