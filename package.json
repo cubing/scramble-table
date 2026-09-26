@@ -48,5 +48,9 @@
   "scripts": {
     "build": "make build",
     "prepublishOnly": "make prepublishOnly"
+  },
+  "patchedDependencies": {
+    "bun-types@1.4.2": "patches/bun-types@1.4.2.patch",
+    "undici-types@7.16.0": "patches/undici-types@7.16.0.patch"
   }
 }

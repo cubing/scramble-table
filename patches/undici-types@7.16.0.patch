@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index a5e7d9de2b58b575a07baf0929663210232e9429..9f169be8142d91b712379d0488dd24162811c481 100644
+--- a/package.json
++++ b/package.json
+@@ -15,6 +15,9 @@
+   "files": [
+     "*.d.ts"
+   ],
++  "dependencies": {
++    "node": "*"
++  },
+   "contributors": [
+     {
+       "name": "Daniele Belardi",
